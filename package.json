@@ -2,7 +2,7 @@
   "name": "china-top-univ",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/hacker0limbo/china-top-univ",
+  "homepage": "https://hacker0limbo.github.io/china-top-univ/",
   "dependencies": {
     "@octokit/rest": "^18.12.0",
     "@react-vant/icons": "^0.0.6",
