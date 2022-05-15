@@ -51,7 +51,7 @@ export default function UniversityTable() {
             shape="round"
             value={searchUnivName}
             onChange={setSearchUnivName}
-            placeholder="请输入高校名称"
+            placeholder="请输入搜索条件"
             onClear={() => {
               setSearchUnivName('');
             }}
