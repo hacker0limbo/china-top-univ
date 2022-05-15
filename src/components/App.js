@@ -7,9 +7,9 @@ function App() {
   return (
     <div className="app">
       <Header />
-      {/* <Auth> */}
+      <Auth>
         <UniversityTable />
-      {/* </Auth> */}
+      </Auth>
     </div>
   );
 }
