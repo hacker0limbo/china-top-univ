@@ -43,7 +43,7 @@ export default function Auth({ children }) {
           }
         >
           <Form.Item
-            labelWidth="87"
+            labelClass="auth-form-item"
             tooltip="秘钥不区分大小写"
             rules={[{ required: true, message: '请填写秘钥' }]}
             name="token"

@@ -18,10 +18,10 @@ export default function UniversityTable() {
     { text: '高校中文名稱', value: 0 },
     { text: '高校英文名稱', value: 1 },
     { text: '地區', value: 2 },
-    { text: '985', value: 5 },
-    { text: '211', value: 6 },
-    { text: '2017雙一流', value: 12 },
-    { text: '2022雙一流', value: 14 },
+    { text: '985', value: 6 },
+    { text: '211', value: 7 },
+    { text: '2017雙一流', value: 8 },
+    { text: '2022雙一流', value: 10 },
   ];
 
   const handleSearch = value => {
