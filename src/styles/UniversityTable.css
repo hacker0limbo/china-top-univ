@@ -10,6 +10,10 @@
   border-bottom: 1px dashed black !important;
 }
 
-.responsiveTable td.pivoted:nth-child(12) {
+.responsiveTable td.pivoted:nth-child(13) {
+  border-bottom: 1px dashed black !important;
+}
+
+.responsiveTable td.pivoted:nth-child(17) {
   border-bottom: 1px dashed black !important;
 }
