@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Flex, Search, Toast, DropdownMenu } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
-import { WarningO  } from '@react-vant/icons'
+import { WarningO } from '@react-vant/icons';
 
 import columnData from '../data/columnData.json';
 import rowData from '../data/rowData.json';
 
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import '../styles/UniversityTable.css';
 
 export default function UniversityTable() {
   const [searchUnivName, setSearchUnivName] = useState('');
@@ -24,24 +25,24 @@ export default function UniversityTable() {
     { text: '2022雙一流', value: 10 },
   ];
 
-  const handleSearch = value => {
+  const handleSearch = (value) => {
     if (!searchOption.hasOwnProperty('value')) {
       // 没选择搜索条件
       Toast({
         message: '请选择搜索条件',
-        icon: <WarningO  />
-      })
+        icon: <WarningO />,
+      });
     } else {
-      const searchOptionIndex = searchOption.value
+      const searchOptionIndex = searchOption.value;
       const filteredRows = rowData.filter((row) => row[searchOptionIndex].includes(value));
       Toast.success({
         message: `检索成功，共检索到 ${filteredRows.length} 条数据`,
         onClose: () => {
           setTableRows(filteredRows);
         },
-      });  
+      });
     }
-  }
+  };
 
   return (
     <Flex direction="column" className="univ-table">
@@ -62,7 +63,6 @@ export default function UniversityTable() {
           <DropdownMenu
             value={searchOption}
             onChange={(v) => {
-              console.log('当前选中的下拉框索引', v);
               setSearchOption(v);
             }}
           >

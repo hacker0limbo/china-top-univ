@@ -30,3 +30,7 @@
 .univ-table {
   margin: 0 20px;
 }
+
+.univ-table-dashed-border {
+  border-bottom: 1px dashed black !important;
+}
