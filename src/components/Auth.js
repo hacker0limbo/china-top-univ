@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Field, Form, Toast } from 'react-vant';
 
+import '../styles/Auth.css'
+
 export default function Auth({ children }) {
   const [auth, setAuth] = useState(false);
   const [form] = Form.useForm();

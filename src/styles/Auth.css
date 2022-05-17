@@ -1,0 +1,11 @@
+/* 
+  该样式用于覆盖 webpack 打包后 production 里 form 显示 flex 的异常情况
+  参考链接: 
+    https://github.com/facebook/create-react-app/issues/6368
+    https://github.com/facebook/create-react-app/issues/7190
+*/
+
+.rv-cell__title {
+  -webkit-flex: none;
+  flex: none;
+}
