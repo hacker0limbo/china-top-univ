@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Flex, Search, Toast, DropdownMenu } from 'react-vant';
+import { Typography, Flex, Search, Toast, DropdownMenu } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import { WarningO } from '@react-vant/icons';
 
+import titleData from '../data/titleData.json';
 import columnData from '../data/columnData.json';
 import rowData from '../data/rowData.json';
 
@@ -13,6 +14,7 @@ export default function UniversityTable() {
   const [searchUnivName, setSearchUnivName] = useState('');
   const [tableRows, setTableRows] = useState(rowData);
   const [searchOption, setSearchOption] = useState({});
+  const [titleName, updateDate] = titleData;
 
   // value 为该 column 在 columnData 中的索引位置
   const searchOptions = [
@@ -46,6 +48,13 @@ export default function UniversityTable() {
 
   return (
     <Flex direction="column" className="univ-table">
+      <Typography.Title center level={2}>
+        {titleName}
+      </Typography.Title>
+      <Typography.Title center level={4}>
+        {updateDate}
+      </Typography.Title>
+
       <Flex direction="row">
         <Flex.Item span={18}>
           <Search
