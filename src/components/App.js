@@ -1,32 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRoutes, useNavigate, useLocation } from 'react-router-dom';
 import { Tabbar } from 'react-vant';
 import { routesConfig } from '../routes';
+import { HomeO, InfoO, SettingO } from '@react-vant/icons';
 
 function App() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [currentPath, setCurrentPath] = useState(pathname);
-  const routes = useRoutes(routesConfig.map(({ path, element }) => ({ path, element })));
+  const routes = useRoutes(routesConfig);
 
   return (
     <div className="app">
       <Tabbar
         safeAreaInsetBottom
         fixed
-        value={currentPath}
+        value={pathname}
         onChange={(v) => {
-          setCurrentPath(v);
           navigate(v);
         }}
       >
-        {routesConfig.map(({ path, title, icon }) => (
-          <Tabbar.Item key={title} name={path} icon={icon}>
-            {title}
-          </Tabbar.Item>
-        ))}
+        <Tabbar.Item name="/" icon={<HomeO />}>
+          主页
+        </Tabbar.Item>
+        <Tabbar.Item name="/about" icon={<InfoO />}>
+          关于
+        </Tabbar.Item>
+        <Tabbar.Item name="/settings" icon={<SettingO />}>
+          设置
+        </Tabbar.Item>
       </Tabbar>
-
       {routes}
     </div>
   );

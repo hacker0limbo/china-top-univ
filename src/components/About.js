@@ -5,8 +5,9 @@ export default function About() {
   return (
     <div>
       <NavBar safeAreaInsetTop title="关于" leftArrow={false} />
-      <Cell.Group border={false} title="项目组成员">
+      <Cell.Group title="项目组成员">
         <Cell
+          border={false}
           title="平臺製作"
           isLink
           value="Limboer"
@@ -23,7 +24,7 @@ export default function About() {
           }}
         />
       </Cell.Group>
-      <Cell.Group border={false} title="项目信息">
+      <Cell.Group title="项目信息">
         <Cell
           title="项目源码"
           isLink

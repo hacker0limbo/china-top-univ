@@ -17,7 +17,8 @@
     "react-super-responsive-table": "^5.2.0",
     "react-vant": "^2.0.0-alpha.36",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zustand": "^3.7.2"
   },
   "scripts": {
     "predeploy": "npm run build",
