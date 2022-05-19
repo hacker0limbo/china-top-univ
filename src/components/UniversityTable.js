@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Flex, Search, Toast, DropdownMenu } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
-import { WarningO } from '@react-vant/icons';
 
 import titleData from '../data/titleData.json';
 import columnData from '../data/columnData.json';
@@ -32,7 +31,7 @@ export default function UniversityTable() {
       // 没选择搜索条件
       Toast({
         message: '请选择搜索条件',
-        icon: <WarningO />,
+        icon: 'warning-o',
       });
     } else {
       const searchOptionIndex = searchOption.value;

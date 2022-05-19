@@ -5,7 +5,6 @@
   "homepage": "https://hacker0limbo.github.io/china-top-univ/",
   "dependencies": {
     "@octokit/rest": "^18.12.0",
-    "@react-vant/icons": "^0.0.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
@@ -15,7 +14,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-super-responsive-table": "^5.2.0",
-    "react-vant": "^2.0.0-alpha.36",
+    "react-vant": "^1.4.18",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
     "zustand": "^3.7.2"

@@ -12,8 +12,8 @@ export default function Settings() {
   return (
     <div>
       <NavBar safeAreaInsetTop title="设置" leftArrow={false} />
-      <Cell.Group title="登录设置">
-        <Cell center title="登录时记住秘钥">
+      <Cell.Group border={false} title="登录设置">
+        <Cell border={false} center title="登录时记住秘钥">
           <Switch
             size={24}
             checked={rememberToken}

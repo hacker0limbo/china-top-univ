@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Field, Form, Toast, NavBar, Typography } from 'react-vant';
+import { Button, Field, Form, Toast, NavBar, Typography, Divider } from 'react-vant';
 import useStore from '../store';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,6 +38,7 @@ export default function Login() {
       </Typography.Title>
 
       <Form
+        border={false}
         form={form}
         showValidateMessage={false}
         className="auth-form"
@@ -58,6 +59,8 @@ export default function Login() {
         >
           <Field placeholder="请输入秘钥" />
         </Form.Item>
+        
+        <Divider style={{ margin: 0 }} />
       </Form>
     </div>
   );

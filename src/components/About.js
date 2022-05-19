@@ -1,11 +1,11 @@
 import React from 'react';
-import { NavBar, Cell } from 'react-vant';
+import { NavBar, Cell, Divider } from 'react-vant';
 
 export default function About() {
   return (
     <div>
       <NavBar safeAreaInsetTop title="关于" leftArrow={false} />
-      <Cell.Group title="项目组成员">
+      <Cell.Group title="项目组成员" border={false}>
         <Cell
           border={false}
           title="平臺製作"
@@ -16,6 +16,7 @@ export default function About() {
           }}
         />
         <Cell
+          border={false}
           title="數據整理"
           isLink
           value="ikimsam"
@@ -24,11 +25,14 @@ export default function About() {
           }}
         />
       </Cell.Group>
-      <Cell.Group title="项目信息">
+
+      <Divider style={{ margin: 0 }} />
+
+      <Cell.Group title="项目信息" border={false}>
         <Cell
+          border={false}
           title="项目源码"
           isLink
-          value=""
           onClick={() => {
             document.location.href = 'https://github.com/hacker0limbo/china-top-univ';
           }}
