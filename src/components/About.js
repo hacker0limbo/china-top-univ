@@ -26,7 +26,7 @@ export default function About() {
         />
       </Cell.Group>
 
-      <Divider style={{ margin: 0 }} />
+      <Divider className="divider-no-margin" />
 
       <Cell.Group title="项目信息" border={false}>
         <Cell

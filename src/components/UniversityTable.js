@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Typography, Flex, Search, Toast, DropdownMenu } from 'react-vant';
+import React, { useState, useMemo } from 'react';
+import { Typography, Flex, Search, Toast, DropdownMenu, Pagination } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import useStore from '../store';
 
 import titleData from '../data/titleData.json';
 import columnData from '../data/columnData.json';
@@ -14,6 +15,17 @@ export default function UniversityTable() {
   const [tableRows, setTableRows] = useState(rowData);
   const [searchOption, setSearchOption] = useState({});
   const [titleName, updateDate] = titleData;
+  const [currentPage, setCurrentPage] = useState(1);
+  const allowPagination = useStore((state) => state.allowPagination);
+  const rowsPerPage = useStore((state) => state.rowsPerPage);
+
+  const tableRowsWithPagination = useMemo(
+    () =>
+      allowPagination
+        ? tableRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+        : tableRows,
+    [allowPagination, currentPage, rowsPerPage, tableRows]
+  );
 
   // value 为该 column 在 columnData 中的索引位置
   const searchOptions = [
@@ -79,24 +91,41 @@ export default function UniversityTable() {
         </Flex.Item>
       </Flex>
 
-      <Table>
-        <Thead>
-          <Tr>
-            {columnData.map((c, i) => (
-              <Th key={i}>{c.toString()}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {tableRows.map((rs, i) => (
-            <Tr key={i}>
-              {rs.map((r, index) => (
-                <Td key={index}>{r}</Td>
+      <div className="univ-table-body">
+        <Table>
+          <Thead>
+            <Tr>
+              {columnData.map((c, i) => (
+                <Th key={i}>{c.toString()}</Th>
               ))}
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {tableRowsWithPagination.map((rs, i) => (
+              <Tr key={i}>
+                {rs.map((r, index) => (
+                  <Td key={index}>{r}</Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </div>
+
+      {allowPagination ? (
+        <div className="univ-table-pagination">
+          <Pagination
+            forceEllipses
+            totalItems={rowData.length}
+            itemsPerPage={rowsPerPage}
+            value={currentPage}
+            onChange={(nextPage) => {
+              setCurrentPage(nextPage);
+              console.log(nextPage);
+            }}
+          />
+        </div>
+      ) : null}
     </Flex>
   );
 }

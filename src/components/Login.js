@@ -60,7 +60,7 @@ export default function Login() {
           <Field placeholder="请输入秘钥" />
         </Form.Item>
         
-        <Divider style={{ margin: 0 }} />
+        <Divider className='divider-no-margin' />
       </Form>
     </div>
   );

@@ -1,10 +1,12 @@
-import create from 'zustand'
-import createAuth from './auth'
+import create from 'zustand';
+import createAuth from './auth';
+import createTable from './table';
 
-const createRoot = set => ({ 
-  ...createAuth(set)
- })
+const createRoot = (set) => ({
+  ...createAuth(set),
+  ...createTable(set),
+});
 
- const useStore = create(createRoot)
+const useStore = create(createRoot);
 
- export default useStore
+export default useStore;
