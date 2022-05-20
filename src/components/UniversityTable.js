@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { Typography, Flex, Search, Toast, DropdownMenu, Pagination } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import useStore from '../store';
@@ -18,6 +18,8 @@ export default function UniversityTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const allowPagination = useStore((state) => state.allowPagination);
   const rowsPerPage = useStore((state) => state.rowsPerPage);
+  // 每次操作完 pagination 后设置为 true
+  const [resetScrollBar, setResetScrollBar] = useState(false);
 
   const tableRowsWithPagination = useMemo(
     () =>
@@ -56,6 +58,19 @@ export default function UniversityTable() {
       });
     }
   };
+
+  useLayoutEffect(() => {
+    // 当使用分页进行操作时如果数据长度变长会导致滚动条出现问题
+    // 这里在每次分页操作后判断是否需要重设滚动条到底部, 保证 pagination 能一直被看见
+    if (resetScrollBar) {
+      if ((window.innerHeight + window.pageYOffset) < document.body.offsetHeight) {
+        // 判断是否在底部
+        // https://stackoverflow.com/a/40370876/12733140
+        window.scrollTo({ top: document.body.scrollHeight });
+      }
+      setResetScrollBar(false);  
+    }
+  }, [resetScrollBar]);
 
   return (
     <Flex direction="column" className="univ-table">
@@ -121,7 +136,7 @@ export default function UniversityTable() {
             value={currentPage}
             onChange={(nextPage) => {
               setCurrentPage(nextPage);
-              console.log(nextPage);
+              setResetScrollBar(true)
             }}
           />
         </div>
