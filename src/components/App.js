@@ -10,6 +10,8 @@ function App() {
 
   return (
     <div className="app">
+      {routes}
+
       <Tabbar
         safeAreaInsetBottom
         fixed
@@ -21,6 +23,9 @@ function App() {
         <Tabbar.Item name="/" icon="home-o">
           主页
         </Tabbar.Item>
+        <Tabbar.Item name="/charts" icon="bar-chart-o">
+          图表
+        </Tabbar.Item>
         <Tabbar.Item name="/about" icon="info-o">
           关于
         </Tabbar.Item>
@@ -28,7 +33,6 @@ function App() {
           设置
         </Tabbar.Item>
       </Tabbar>
-      {routes}
     </div>
   );
 }
