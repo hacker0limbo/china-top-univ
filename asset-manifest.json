@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/china-top-univ/static/css/main.b32cb61e.css",
-    "main.js": "/china-top-univ/static/js/main.1c16c74f.js",
+    "main.css": "/china-top-univ/static/css/main.3a98a9e3.css",
+    "main.js": "/china-top-univ/static/js/main.c7c510c4.js",
     "index.html": "/china-top-univ/index.html",
-    "main.b32cb61e.css.map": "/china-top-univ/static/css/main.b32cb61e.css.map",
-    "main.1c16c74f.js.map": "/china-top-univ/static/js/main.1c16c74f.js.map"
+    "main.3a98a9e3.css.map": "/china-top-univ/static/css/main.3a98a9e3.css.map",
+    "main.c7c510c4.js.map": "/china-top-univ/static/js/main.c7c510c4.js.map"
   },
   "entrypoints": [
-    "static/css/main.b32cb61e.css",
-    "static/js/main.1c16c74f.js"
+    "static/css/main.3a98a9e3.css",
+    "static/js/main.c7c510c4.js"
   ]
 }
