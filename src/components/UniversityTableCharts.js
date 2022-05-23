@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavBar, Tabs, Typography } from 'react-vant';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval, Axis, TextGuide, ScrollBar, PieLabel } from '@antv/f2';
+import useStore from '../store';
 
 import locationData from '../data/locationData.json';
 
@@ -12,6 +13,18 @@ export default function UniversityTable() {
     doubleTops: locationDoubleTopsData,
   } = locationData;
 
+  const location985BarChartLayout = useStore((state) => state.charts.location985.bar.layout);
+  const location985BarChartDataWithLayout = useMemo(() => {
+    // sort 会改变原数组, 需要 shallow copy 一份
+    if (location985BarChartLayout === 'ascending') {
+      return [...location985Data.bar].sort((a, b) => a.count - b.count);
+    } else if (location985BarChartLayout === 'descending') {
+      return [...location985Data.bar].sort((a, b) => b.count - a.count);
+    } else {
+      return location985Data.bar;
+    }
+  }, [location985BarChartLayout, location985Data.bar]);
+
   return (
     <div>
       <NavBar safeAreaInsetTop title="图表" leftArrow={false} />
@@ -21,7 +34,10 @@ export default function UniversityTable() {
             985高校地区分布柱状图
           </Typography.Title>
           <Canvas>
-            <Chart data={location985Data.bar} scale={{ count: { max: 10, tickCount: 6 } }}>
+            <Chart
+              data={location985BarChartDataWithLayout}
+              scale={{ count: { max: 10, tickCount: 6 } }}
+            >
               <Axis field="location" />
               <Axis field="count" />
               <Interval x="location" y="count" color="location" />

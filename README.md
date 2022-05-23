@@ -4,12 +4,13 @@
 
 加油鸭
 
-## 记录
+## 数据更新
 
-每次数据更新之后可能需要检查的几个地方:
-- 重新使用本地 cli 跑一遍数据
-- 搜索条件对应的 column 位置
-- 虚线的 css 选择器
+每次 xlsx 数据更新后需重新用 cli 跑一下数据得到最新的 json, 数据变动时需检查这几个地方:
+- 主页搜索条件的索引位置
+- 主页表格展示的虚线 css 选择器索引位置
+- column 名字是否改变
+
 
 ## 待处理问题:
 
@@ -28,3 +29,14 @@ react-vant 降级为 v1 后的问题
 antv f2 问题:
 - canvas 里的 chart 数据更新后没有重新渲染, 原因不明...
 - 手机浏览器测试下字体发虚, 原因不明...
+
+## 记录
+
+zustand 是该项目的项目管理库. 由于这个项目需要全局状态, redux 太重, 别的小的库 github star 星星也不多, 而且也不是 flux 的, 我自己不喜欢 mobox 这种响应式, 反而 redux 这种偏函数式和中心化数据流用的习惯, 但 redux 真的太重了.
+
+zustand 用下来有几点感受:
+- state 和 action 是放在一起的, 好处是直接写一块, 坏处是全部都在 store 里, 该怎么组织...
+- 官方提到是 unopinionated, 好处是想怎么写就怎么写, 但官方也不给 best practice, redux 至少还出了一个 redux toolkit, 或者你去用 rematch 等衍生库. zustand 你想找一下 best practice 几乎没有
+- redux 可以用 combineReducers 把不同的状态集合起来, 而且每个 reducer 是会被以对象值形式保存起来, 去查看整个 store 的时候就很清晰, 有哪些状态, 子状态. 但是 zustand 要分开不同的 state 还要自己在 create 里声明, 在合并的时候本身不做任何的状态空间命名. 同时由于 action 也是被放在 store 里的, 会显的有点奇怪...
+- 确实不用写模板代码, 中间件, persist state, immutable 甚至搭配 immer 都做的很好. 
+
