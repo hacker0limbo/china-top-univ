@@ -8,7 +8,7 @@ import '../styles/Login.css';
 export default function Login() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { login, logout } = useStore((state) => ({ login: state.login, logout: state.logout }));
+  const { login, logout } = useStore((state) => ({ login: state.authActions.login, logout: state.authActions.logout }));
 
   const onFinish = (values) => {
     const { token } = values;

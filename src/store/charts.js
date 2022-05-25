@@ -1,3 +1,5 @@
+import { CHARTS } from '../constants/store';
+
 function setBarChartLayout(set, chartName, layoutValue) {
   set((state) => ({
     charts: {
@@ -21,20 +23,20 @@ function setBarChartLayout(set, chartName, layoutValue) {
  */
 const createCharts = (set, get) => ({
   charts: {
-    location985: { bar: { layout: 'default' } },
-    location211: { bar: { layout: 'default' } },
-    locationDoubleTops: { bar: { layout: 'default' } },
+    location985: { bar: { layout: CHARTS.LAYOUT.DEFAULT.STATE } },
+    location211: { bar: { layout: CHARTS.LAYOUT.DEFAULT.STATE } },
+    locationDoubleTops: { bar: { layout: CHARTS.LAYOUT.DEFAULT.STATE } },
   },
   chartsActions: {
     setLocation985BarChartLayout: (layoutValue) => {
-      setBarChartLayout(set, 'location985', layoutValue)
+      setBarChartLayout(set, 'location985', layoutValue);
     },
     setLocation211BarChartLayout: (layoutValue) => {
-      setBarChartLayout(set, 'location211', layoutValue)
+      setBarChartLayout(set, 'location211', layoutValue);
     },
     setLocationDoubleTopsBarChartLayout: (layoutValue) => {
-      setBarChartLayout(set, 'location211', layoutValue)
-    },  
+      setBarChartLayout(set, 'locationDoubleTops', layoutValue);
+    },
   },
 });
 

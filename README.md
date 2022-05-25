@@ -38,5 +38,5 @@ zustand 用下来有几点感受:
 - state 和 action 是放在一起的, 好处是直接写一块, 坏处是全部都在 store 里, 该怎么组织...
 - 官方提到是 unopinionated, 好处是想怎么写就怎么写, 但官方也不给 best practice, redux 至少还出了一个 redux toolkit, 或者你去用 rematch 等衍生库. zustand 你想找一下 best practice 几乎没有
 - redux 可以用 combineReducers 把不同的状态集合起来, 而且每个 reducer 是会被以对象值形式保存起来, 去查看整个 store 的时候就很清晰, 有哪些状态, 子状态. 但是 zustand 要分开不同的 state 还要自己在 create 里声明, 在合并的时候本身不做任何的状态空间命名. 同时由于 action 也是被放在 store 里的, 会显的有点奇怪...
-- 确实不用写模板代码, 中间件, persist state, immutable 甚至搭配 immer 都做的很好. 
+- 确实不用写模板代码, 中间件, persist state, immutable 甚至搭配 immer 都做的很好.
 

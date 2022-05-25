@@ -10,7 +10,7 @@ export const CHARTS = {
     },
     DEFAULT: {
       STATE: 'default',
-      text: '默认',
+      TEXT: '默认',
     },
   },
 };

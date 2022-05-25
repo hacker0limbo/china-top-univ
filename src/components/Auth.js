@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import {getPersistAuth} from '../utils'
 
 export default function Auth({ children }) {
-  const authed = useStore((state) => state.authed);
+  const authed = useStore((state) => state.auth.authed);
 
   if (getPersistAuth()) {
     return children;

@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { NavBar, Tabs, Typography } from 'react-vant';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval, Axis, TextGuide, ScrollBar, PieLabel } from '@antv/f2';
 import useStore from '../store';
+import { CHARTS } from '../constants/store';
 
 import locationData from '../data/locationData.json';
 
@@ -12,18 +13,20 @@ export default function UniversityTable() {
     985: location985Data,
     doubleTops: locationDoubleTopsData,
   } = locationData;
-
   const location985BarChartLayout = useStore((state) => state.charts.location985.bar.layout);
-  const location985BarChartDataWithLayout = useMemo(() => {
-    // sort 会改变原数组, 需要 shallow copy 一份
-    if (location985BarChartLayout === 'ascending') {
-      return [...location985Data.bar].sort((a, b) => a.count - b.count);
-    } else if (location985BarChartLayout === 'descending') {
-      return [...location985Data.bar].sort((a, b) => b.count - a.count);
-    } else {
-      return location985Data.bar;
-    }
-  }, [location985BarChartLayout, location985Data.bar]);
+  const location211BarChartLayout = useStore((state) => state.charts.location211.bar.layout);
+  const locationDoubleTopsBarChartLayout = useStore(
+    (state) => state.charts.locationDoubleTops.bar.layout
+  );
+
+  const getLocationBarChartLayoutStateToData = (locationData) => {
+    // 做一个表, 将当前布局状态和重新布局后的数据 map
+    return {
+      [CHARTS.LAYOUT.ASCENDING.STATE]: [...locationData.bar].sort((a, b) => a.count - b.count),
+      [CHARTS.LAYOUT.DESCENDING.STATE]: [...locationData.bar].sort((a, b) => b.count - a.count),
+      [CHARTS.LAYOUT.DEFAULT.STATE]: [...locationData.bar],
+    };
+  };
 
   return (
     <div>
@@ -35,7 +38,9 @@ export default function UniversityTable() {
           </Typography.Title>
           <Canvas>
             <Chart
-              data={location985BarChartDataWithLayout}
+              data={
+                getLocationBarChartLayoutStateToData(location985Data)[location985BarChartLayout]
+              }
               scale={{ count: { max: 10, tickCount: 6 } }}
             >
               <Axis field="location" />
@@ -94,7 +99,12 @@ export default function UniversityTable() {
             211高校地区分布柱状图
           </Typography.Title>
           <Canvas>
-            <Chart data={location211Data.bar} scale={{ count: { tickCount: 6 } }}>
+            <Chart
+              data={
+                getLocationBarChartLayoutStateToData(location211Data)[location211BarChartLayout]
+              }
+              scale={{ count: { tickCount: 6 } }}
+            >
               <Axis field="location" />
               <Axis field="count" />
               <Interval x="location" y="count" color="location" />
@@ -148,10 +158,17 @@ export default function UniversityTable() {
 
         <Tabs.TabPane title="2022双一流">
           <Typography.Title level={4} center className="univ-charts-title">
-            双一流高校地区分布柱状图
+            2022双一流高校地区分布柱状图
           </Typography.Title>
           <Canvas>
-            <Chart data={locationDoubleTopsData.bar} scale={{ count: { max: 40, tickCount: 6 } }}>
+            <Chart
+              data={
+                getLocationBarChartLayoutStateToData(locationDoubleTopsData)[
+                  locationDoubleTopsBarChartLayout
+                ]
+              }
+              scale={{ count: { max: 40, tickCount: 6 } }}
+            >
               <Axis field="location" />
               <Axis field="count" />
               <Interval x="location" y="count" color="location" />
