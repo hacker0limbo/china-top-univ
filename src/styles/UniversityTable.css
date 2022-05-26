@@ -2,18 +2,18 @@
   该 stylesheet 用于覆盖 react-super-responsive-table 里对 td border 的限制
 */
 
-.responsiveTable td.pivoted:nth-child(2) {
+.responsiveTable td.pivoted:nth-child(3) {
   border-bottom: 1px dashed black !important;
 }
 
-.responsiveTable td.pivoted:nth-child(5) {
-  border-bottom: 1px dashed black !important;
-}
-
-.responsiveTable td.pivoted:nth-child(13) {
+.responsiveTable td.pivoted:nth-child(9) {
   border-bottom: 1px dashed black !important;
 }
 
 .responsiveTable td.pivoted:nth-child(17) {
+  border-bottom: 1px dashed black !important;
+}
+
+.responsiveTable td.pivoted:nth-child(21) {
   border-bottom: 1px dashed black !important;
 }

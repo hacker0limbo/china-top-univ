@@ -15,7 +15,7 @@ function App() {
       <Tabbar
         safeAreaInsetBottom
         fixed
-        value={pathname}
+        value={`/${pathname.split('/')[1]}`}
         onChange={(v) => {
           navigate(v);
         }}

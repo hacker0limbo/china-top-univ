@@ -34,6 +34,33 @@
   padding: 20px;
 }
 
+.about-updates-section {
+  margin: 0 20px 20px 20px;
+}
+
+.about-updates-section li {
+  list-style: circle;
+  margin-left: 30px;
+}
+
+.about-updates-section .rv-typography--text {
+  display: block;
+}
+
+.about-disclaimer-body {
+  margin: 0 20px;
+}
+
+.about-disclaimer-body li {
+  list-style: circle;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.about-disclaimer-body .rv-typography--text {
+  display: block;
+}
+
 .divider-no-margin {
   margin: 0;
 }

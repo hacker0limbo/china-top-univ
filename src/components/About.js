@@ -1,7 +1,10 @@
 import React from 'react';
 import { NavBar, Cell, Divider } from 'react-vant';
+import { useNavigate } from 'react-router-dom';
 
 export default function About() {
+  const navigate = useNavigate();
+
   return (
     <div>
       <NavBar safeAreaInsetTop title="关于" leftArrow={false} />
@@ -35,6 +38,27 @@ export default function About() {
           isLink
           onClick={() => {
             document.location.href = 'https://github.com/hacker0limbo/china-top-univ';
+          }}
+        />
+        <Cell
+          border={false}
+          title="更新日志"
+          isLink
+          onClick={() => {
+            navigate('./update-logs')
+          }}
+        />
+      </Cell.Group>
+
+      <Divider className="divider-no-margin" />
+
+      <Cell.Group title="开原许可" border={false}>
+        <Cell
+          border={false}
+          title="免责声明"
+          isLink
+          onClick={() => {
+            navigate('./disclaimer');
           }}
         />
       </Cell.Group>
