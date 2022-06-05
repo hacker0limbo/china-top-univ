@@ -40,3 +40,8 @@ zustand 用下来有几点感受:
 - redux 可以用 combineReducers 把不同的状态集合起来, 而且每个 reducer 是会被以对象值形式保存起来, 去查看整个 store 的时候就很清晰, 有哪些状态, 子状态. 但是 zustand 要分开不同的 state 还要自己在 create 里声明, 在合并的时候本身不做任何的状态空间命名. 同时由于 action 也是被放在 store 里的, 会显的有点奇怪...
 - 确实不用写模板代码, 中间件, persist state, immutable 甚至搭配 immer 都做的很好.
 
+## TODO
+
+- 增加多维搜索(需重写, UI 增加悬浮球)
+- antv f2 支持横屏展示
+- 支持文件上传和验证

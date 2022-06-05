@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavBar, Cell, Switch, Button, Dialog, Divider, Stepper, ActionSheet } from 'react-vant';
 import useStore from '../store';
-import { setPersistAuth, getPersistAuth, removePersistAuth } from '../utils';
+import { LocalStorageService } from '../services'
 import { CHARTS } from '../constants/store';
 
 export default function Settings() {
   const navigate = useNavigate();
   // auth 相关状态与处理
-  const [rememberToken, setRememberToken] = useState(getPersistAuth());
+  const [rememberToken, setRememberToken] = useState(LocalStorageService.getPersistAuth());
   const logout = useStore((state) => state.authActions.logout);
   // pagination 相关状态与处理
   const allowPagination = useStore((state) => state.table.pagination.allowPagination);
@@ -70,7 +70,7 @@ export default function Settings() {
             checked={rememberToken}
             onChange={(changedValue) => {
               setRememberToken(changedValue);
-              setPersistAuth(changedValue);
+              LocalStorageService.setPersistAuth(changedValue);
             }}
           />
         </Cell>
@@ -188,7 +188,7 @@ export default function Settings() {
               .then(() => {
                 logout();
                 // 需要移除持久化 auth
-                removePersistAuth();
+                LocalStorageService.removePersistAuth();
                 navigate('/login', { replace: true });
               })
               .catch(() => {

@@ -1,12 +1,12 @@
 import React from 'react';
 import useStore from '../store';
 import { Navigate } from 'react-router-dom';
-import {getPersistAuth} from '../utils'
+import { LocalStorageService } from '../services';
 
 export default function Auth({ children }) {
   const authed = useStore((state) => state.auth.authed);
 
-  if (getPersistAuth()) {
+  if (LocalStorageService.getPersistAuth()) {
     return children;
   }
 

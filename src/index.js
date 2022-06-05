@@ -6,7 +6,7 @@ import App from './components/App';
 import 'react-vant/lib/index.css';
 import './index.css';
 
-import './config';
+import './config/react-vant.config';
 
 ReactDOM.render(
   <HashRouter>
