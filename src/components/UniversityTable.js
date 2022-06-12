@@ -30,7 +30,7 @@ export default function UniversityTable() {
   const [titleName, updateDate] = titleData;
   // 基本搜索
   const [searchUnivName, setSearchUnivName] = useState('');
-  const [searchOption, setSearchOption] = useState({ value: 3 });
+  const [searchOption, setSearchOption] = useState({ value: 0 });
   const [showSearchOptionsPicker, setShowSearchOptionsPicker] = useState(false);
   // 高级搜索
   const [showAdvancedSearchDialog, setShowAdvancedSearchDialog] = useState(false);
@@ -165,7 +165,6 @@ export default function UniversityTable() {
       >
         <Picker
           title="请选择搜索项"
-          defaultIndex={2}
           columns={searchOptions.map((s) => s.text)}
           onConfirm={(v) => {
             const searchItemIndex = searchOptions.find((s) => s.text === v).value;
