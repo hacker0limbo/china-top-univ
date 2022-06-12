@@ -16,6 +16,7 @@
 
 基本问题:
 - ~~由于数据长度不一致的原因, 在 pagination 操作后会出现右侧滚动条不在底部的位置, 解决办法是监听 pagination 的 onChange 事件, 记一个 flag, useLayoutEffect 里进行判断是否需要调整将滚动条移至底部, 最后将 flay 复原~~
+- ios 上浏览器在 focus 一个 input 元素会默认进行 zoom, 还没办法取消...解决办法是强行让整个 html 不进行缩放: https://stackoverflow.com/a/46254706/12733140
 
 react-vant 2.0 遇到的问题:
 - 打包后 Form 中的 Field 的 flex 出现问题, 已用自定义样式覆盖
