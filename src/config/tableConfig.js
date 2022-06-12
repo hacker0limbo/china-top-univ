@@ -6,7 +6,7 @@ export const searchOptions = [
   { text: '所在地', value: 3 },
   { text: '中管高校', value: 7 },
   { text: '辦學模式', value: 8 },
-  { text: '985', value: 10 },
-  { text: '211', value: 11 },
-  { text: '2022雙一流', value: 14 },
+  { text: '985', value: 10, isDual: true },
+  { text: '211', value: 11, isDual: true },
+  { text: '2022雙一流', value: 14, isDual: true },
 ];

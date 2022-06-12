@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NavBar, Cell, Switch, Button, Dialog, Divider, Stepper, ActionSheet } from 'react-vant';
+import { NavBar, Cell, Switch, Button, Dialog, Stepper, ActionSheet } from 'react-vant';
 import useStore from '../store';
 import { LocalStorageService } from '../services'
 import { CHARTS } from '../constants/store';
@@ -63,8 +63,8 @@ export default function Settings() {
   return (
     <div>
       <NavBar safeAreaInsetTop title="设置" leftArrow={false} />
-      <Cell.Group border={false} title="登录设置">
-        <Cell border={false} center title="登录时记住秘钥">
+      <Cell.Group title="登录设置">
+        <Cell center title="登录时记住秘钥">
           <Switch
             size={24}
             checked={rememberToken}
@@ -76,10 +76,8 @@ export default function Settings() {
         </Cell>
       </Cell.Group>
 
-      <Divider className="divider-no-margin" />
-
-      <Cell.Group border={false} title="表格">
-        <Cell border={false} center title="显示分页">
+      <Cell.Group  title="表格">
+        <Cell center title="显示分页">
           <Switch
             size={24}
             checked={allowPagination}
@@ -89,7 +87,7 @@ export default function Settings() {
           />
         </Cell>
 
-        <Cell border={false} center title="每页展示条目量">
+        <Cell  center title="每页展示条目量">
           <Stepper
             value={rowsPerPage}
             min={5}
@@ -102,14 +100,11 @@ export default function Settings() {
         </Cell>
       </Cell.Group>
 
-      <Divider className="divider-no-margin" />
-
-      <Cell.Group border={false} title="图表">
+      <Cell.Group title="图表">
         <Cell
           onClick={() => {
             setLocation985BarChartLayoutVisible(true);
           }}
-          border={false}
           isLink
           title="985高校地区柱状图排序方式"
           value={barChartLayoutStateToText[location985BarChartLayout]}
@@ -132,7 +127,6 @@ export default function Settings() {
           onClick={() => {
             setLocation211BarChartLayoutVisible(true);
           }}
-          border={false}
           isLink
           title="211高校地区柱状图排序方式"
           value={barChartLayoutStateToText[location211BarChartLayout]}
@@ -155,7 +149,6 @@ export default function Settings() {
           onClick={() => {
             setLocationDoubleTopsBarChartLayoutVisible(true);
           }}
-          border={false}
           isLink
           title="双一流高校地区柱状图排序方式"
           value={barChartLayoutStateToText[locationDoubleTopsBarChartLayout]}

@@ -1,3 +1,7 @@
+body {
+  background-color: #f7f7f7;
+}
+
 .app {
   margin-bottom: 26px;
 }
@@ -10,15 +14,27 @@
   margin: 20px;
 }
 
-.univ-table {
-  margin: 0 20px;
+.univ-table-body {
+  margin: 16px;
 }
 
-.univ-table-body {
-  margin-bottom: 16px;
+.adv-search-list-item {
+  padding: 10px;
+}
+
+.adv-search-list-item-control {
+  overflow: hidden;
+  border: 1px solid #f2f2f2;
+  border-radius: 6px;
+}
+
+.adv-search-list-item-add {
+  padding: 0 10px 10px 10px;
 }
 
 .univ-table-pagination {
+  margin-left: 16px;
+  margin-right: 16px;
   margin-bottom: 48px;
 }
 

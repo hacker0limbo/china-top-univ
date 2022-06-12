@@ -8,7 +8,10 @@ import '../styles/Login.css';
 export default function Login() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { login, logout } = useStore((state) => ({ login: state.authActions.login, logout: state.authActions.logout }));
+  const { login, logout } = useStore((state) => ({
+    login: state.authActions.login,
+    logout: state.authActions.logout,
+  }));
 
   const onFinish = (values) => {
     const { token } = values;
@@ -59,8 +62,8 @@ export default function Login() {
         >
           <Field placeholder="请输入秘钥" />
         </Form.Item>
-        
-        <Divider className='divider-no-margin' />
+
+        <Divider className="divider-no-margin" />
       </Form>
     </div>
   );

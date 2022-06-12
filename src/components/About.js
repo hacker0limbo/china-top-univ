@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBar, Cell, Divider } from 'react-vant';
+import { NavBar, Cell } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
 
 export default function About() {
@@ -8,9 +8,8 @@ export default function About() {
   return (
     <div>
       <NavBar safeAreaInsetTop title="关于" leftArrow={false} />
-      <Cell.Group title="项目组成员" border={false}>
+      <Cell.Group title="项目组成员">
         <Cell
-          border={false}
           title="平臺製作"
           isLink
           value="Limboer"
@@ -19,7 +18,6 @@ export default function About() {
           }}
         />
         <Cell
-          border={false}
           title="數據整理"
           isLink
           value="ikimsam"
@@ -29,11 +27,8 @@ export default function About() {
         />
       </Cell.Group>
 
-      <Divider className="divider-no-margin" />
-
-      <Cell.Group title="项目信息" border={false}>
+      <Cell.Group title="项目信息">
         <Cell
-          border={false}
           title="项目源码"
           isLink
           onClick={() => {
@@ -41,20 +36,16 @@ export default function About() {
           }}
         />
         <Cell
-          border={false}
           title="更新日志"
           isLink
           onClick={() => {
-            navigate('./update-logs')
+            navigate('./update-logs');
           }}
         />
       </Cell.Group>
 
-      <Divider className="divider-no-margin" />
-
-      <Cell.Group title="开原许可" border={false}>
+      <Cell.Group title="开原许可">
         <Cell
-          border={false}
           title="免责声明"
           isLink
           onClick={() => {
