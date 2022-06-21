@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect, useRef } from 'react';
 import {
   Typography,
   Flex,
@@ -12,6 +12,7 @@ import {
   Field,
   Icon,
   Button,
+  Radio,
 } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import useStore from '../store';
@@ -35,6 +36,9 @@ export default function UniversityTable() {
   // 高级搜索
   const [showAdvancedSearchDialog, setShowAdvancedSearchDialog] = useState(false);
   const [advancedSearchForm] = Form.useForm();
+  const dualSearchOptionsNames = searchOptions.filter((o) => o.isDual).map((v) => v.text);
+  // 用于保存当前(之前 Picker 选择的搜索项)
+  const previousSearchItem = useRef(null);
   // 表格分页和数据
   const [tableRows, setTableRows] = useState(rowData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -237,16 +241,56 @@ export default function UniversityTable() {
                         <UniversityTableAdvSearchPicker
                           form={advancedSearchForm}
                           searchItemIndex={index}
+                          onChange={(value) => {
+                            const advancedSearchesValues =
+                              advancedSearchForm.getFieldValue('advancedSearches');
+                            if (value !== previousSearchItem?.current) {
+                              // 选了一个新的 search item, 重设 advancedSearchContent
+                              advancedSearchesValues[index].advancedSearchContent = '';
+                              advancedSearchForm.setFieldsValue({
+                                advancedSearches: advancedSearchesValues,
+                              });
+                              previousSearchItem.current = value;
+                            }
+                          }}
                           placeholder="请选择搜索项"
                         />
                       </Form.Item>
 
                       <Form.Item
-                        rules={[{ required: true, message: '请输入搜索内容' }]}
-                        label="搜索条件"
-                        name={[field.name, 'advancedSearchContent']}
+                        noStyle
+                        shouldUpdate={(p, n) =>
+                          p.advancedSearches?.[index]?.advancedSearchOption !==
+                          n.advancedSearches?.[index]?.advancedSearchOption
+                        }
                       >
-                        <Field placeholder="请输入搜索内容" />
+                        {() =>
+                          dualSearchOptionsNames.includes(
+                            advancedSearchForm.getFieldValue('advancedSearches')?.[index]
+                              ?.advancedSearchOption
+                          ) ? (
+                            <Form.Item
+                              label="搜索条件"
+                              name={[field.name, 'advancedSearchContent']}
+                              rules={[{ required: true, message: '请选择搜索条件' }]}
+                              showValidateMessage
+                            >
+                              <Radio.Group direction="horizontal">
+                                <Radio name="是">是</Radio>
+                                <Radio name="N/A">N/A</Radio>
+                              </Radio.Group>
+                            </Form.Item>
+                          ) : (
+                            <Form.Item
+                              rules={[{ required: true, message: '请输入搜索条件内容' }]}
+                              label="搜索条件"
+                              name={[field.name, 'advancedSearchContent']}
+                              initialValue=""
+                            >
+                              <Field placeholder="请输入搜索条件内容" />
+                            </Form.Item>
+                          )
+                        }
                       </Form.Item>
                     </div>
                   </div>
