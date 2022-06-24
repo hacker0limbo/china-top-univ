@@ -16,7 +16,8 @@ import {
 } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import useStore from '../store';
-import UniversityTableAdvSearchPicker from './UniversityTableAdvSearchPicker';
+import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
+import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
 
 import titleData from '../data/titleData.json';
 import columnData from '../data/columnData.json';
@@ -36,7 +37,15 @@ export default function UniversityTable() {
   // 高级搜索
   const [showAdvancedSearchDialog, setShowAdvancedSearchDialog] = useState(false);
   const [advancedSearchForm] = Form.useForm();
+  // 值是二元的搜索项
   const dualSearchOptionsNames = searchOptions.filter((o) => o.isDual).map((v) => v.text);
+  // 值是多元但可统计的搜索项, 目前只有
+  const countedMultipleSearchOptions = searchOptions
+    .filter((o) => o.isCountedMultiple)
+    .map((option) => ({
+      text: option.text,
+      countableValues: Array.from(new Set(rowData.map((r) => r[option.value]))),
+    }));
   // 用于保存当前(之前 Picker 选择的搜索项)
   const previousSearchItem = useRef(null);
   // 表格分页和数据
@@ -238,7 +247,7 @@ export default function UniversityTable() {
                         label="搜索项"
                         customField
                       >
-                        <UniversityTableAdvSearchPicker
+                        <UniversityTableAdvSearchOptionPicker
                           form={advancedSearchForm}
                           searchItemIndex={index}
                           onChange={(value) => {
@@ -246,6 +255,7 @@ export default function UniversityTable() {
                               advancedSearchForm.getFieldValue('advancedSearches');
                             if (value !== previousSearchItem?.current) {
                               // 选了一个新的 search item, 重设 advancedSearchContent
+                              // 否则还是保存之前的 content, 因为 search item 不变
                               advancedSearchesValues[index].advancedSearchContent = '';
                               advancedSearchForm.setFieldsValue({
                                 advancedSearches: advancedSearchesValues,
@@ -264,23 +274,54 @@ export default function UniversityTable() {
                           n.advancedSearches?.[index]?.advancedSearchOption
                         }
                       >
-                        {() =>
-                          dualSearchOptionsNames.includes(
+                        {() => {
+                          const countedMultipleSearchOptionsNames =
+                            countedMultipleSearchOptions.map((o) => o.text);
+                          const currentAdvancedSearchOption =
                             advancedSearchForm.getFieldValue('advancedSearches')?.[index]
-                              ?.advancedSearchOption
-                          ) ? (
-                            <Form.Item
-                              label="搜索条件"
-                              name={[field.name, 'advancedSearchContent']}
-                              rules={[{ required: true, message: '请选择搜索条件' }]}
-                              showValidateMessage
-                            >
-                              <Radio.Group direction="horizontal">
-                                <Radio name="是">是</Radio>
-                                <Radio name="N/A">N/A</Radio>
-                              </Radio.Group>
-                            </Form.Item>
-                          ) : (
+                              ?.advancedSearchOption;
+                          const countedMultipleSearchOption = countedMultipleSearchOptions.filter(
+                            (o) => o.text === currentAdvancedSearchOption
+                          )?.[0];
+
+                          // 如果是二元的, 展示为 radio
+                          if (dualSearchOptionsNames.includes(currentAdvancedSearchOption)) {
+                            return (
+                              <Form.Item
+                                label="搜索条件"
+                                name={[field.name, 'advancedSearchContent']}
+                                rules={[{ required: true, message: '请选择搜索条件' }]}
+                                showValidateMessage
+                              >
+                                <Radio.Group direction="horizontal">
+                                  <Radio name="是">是</Radio>
+                                  <Radio name="N/A">N/A</Radio>
+                                </Radio.Group>
+                              </Form.Item>
+                            );
+                          }
+
+                          // 如果是多元可计数的, 展示为 picker
+                          if (
+                            countedMultipleSearchOptionsNames.includes(currentAdvancedSearchOption)
+                          ) {
+                            return (
+                              <Form.Item
+                                label="搜索条件"
+                                name={[field.name, 'advancedSearchContent']}
+                                rules={[{ required: true, message: '请选择搜索条件' }]}
+                                customField
+                              >
+                                <UniversityTableAdvSearchContentPicker
+                                  placeholder="选择搜索条件"
+                                  countedMultipleSearchOption={countedMultipleSearchOption}
+                                />
+                              </Form.Item>
+                            );
+                          }
+
+                          // 默认为输入框
+                          return (
                             <Form.Item
                               rules={[{ required: true, message: '请输入搜索条件内容' }]}
                               label="搜索条件"
@@ -289,8 +330,8 @@ export default function UniversityTable() {
                             >
                               <Field placeholder="请输入搜索条件内容" />
                             </Form.Item>
-                          )
-                        }
+                          );
+                        }}
                       </Form.Item>
                     </div>
                   </div>

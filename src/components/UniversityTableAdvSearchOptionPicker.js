@@ -3,7 +3,8 @@ import { Field, Picker, Popup } from 'react-vant';
 
 import { searchOptions } from '../config/tableConfig';
 
-export default function UniversityTableAdvSearchPicker(props) {
+// 搜索项的 picker 组件
+export default function UniversityTableAdvSearchOptionPicker(props) {
   const { value, onChange, name, form, searchItemIndex, ...fieldProps } = props
   const [showAdvancedSearchOptionsPicker, setShowAdvancedSearchOptionsPicker] = useState(false);
   const seletedSearchOptions = form?.getFieldsValue()?.advancedSearches?.map(v => v?.advancedSearchOption) ?? []
