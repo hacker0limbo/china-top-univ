@@ -1,17 +1,23 @@
 import React from 'react';
-import { Button, Field, Form, Toast, NavBar, Typography, Divider } from 'react-vant';
-import useStore from '../store';
+import { Button, Field, Form, Toast, NavBar, Typography } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import { useDispatch } from 'react-redux';
 
-import '../styles/Login.css';
+const useStyles = createUseStyles({
+  loginForm: {
+    margin: '20px 0',
+  },
+  loginFormFooter: {
+    margin: '20px',
+  },
+});
 
 export default function Login() {
+  const classes = useStyles();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { login, logout } = useStore((state) => ({
-    login: state.authActions.login,
-    logout: state.authActions.logout,
-  }));
+  const dispatch = useDispatch();
 
   const onFinish = (values) => {
     const { token } = values;
@@ -19,7 +25,7 @@ export default function Login() {
       Toast.success({
         message: '秘钥正确',
         onClose: () => {
-          login();
+          dispatch.auth.login();
           navigate('/');
         },
       });
@@ -27,7 +33,7 @@ export default function Login() {
       Toast.fail({
         message: '秘钥错误，请重试',
         onClose: () => {
-          logout();
+          dispatch.auth.logout();
         },
       });
     }
@@ -44,10 +50,10 @@ export default function Login() {
         border={false}
         form={form}
         showValidateMessage={false}
-        className="auth-form"
+        className={classes.loginForm}
         onFinish={onFinish}
         footer={
-          <div className="auth-form-footer">
+          <div className={classes.loginFormFooter}>
             <Button round nativeType="submit" type="primary" block>
               提交
             </Button>
@@ -62,8 +68,6 @@ export default function Login() {
         >
           <Field placeholder="请输入秘钥" />
         </Form.Item>
-
-        <Divider className="divider-no-margin" />
       </Form>
     </div>
   );

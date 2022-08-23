@@ -15,9 +15,10 @@ import {
   Radio,
 } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
-import useStore from '../store';
 import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
 import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
+import { createUseStyles } from 'react-jss';
+import { useSelector } from 'react-redux';
 
 import titleData from '../data/titleData.json';
 import columnData from '../data/columnData.json';
@@ -25,9 +26,31 @@ import rowData from '../data/rowData.json';
 import { searchOptions } from '../config/tableConfig';
 
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
-import '../styles/UniversityTable.css';
+import '../styles/responsiveTable.override.css';
+
+const useStyles = createUseStyles({
+  tableBody: {
+    margin: '16px',
+  },
+  tablePagination: {
+    marginLeft: '16px',
+    marginRight: '16px',
+    marginBottom: 'calc(var(--rv-tabbar-height) + 16px)',
+  },
+  advSearchListItem: {
+    padding: '10px',
+  },
+  advSearchListItemBody: {
+    border: '1px solid #f2f2f2',
+    borderRadius: '6px',
+  },
+  advSearchListItemAdd: {
+    padding: '0 10px 10px 10px',
+  },
+});
 
 export default function UniversityTable() {
+  const classes = useStyles();
   // 标题和更新日期
   const [titleName, updateDate] = titleData;
   // 基本搜索
@@ -51,8 +74,8 @@ export default function UniversityTable() {
   // 表格分页和数据
   const [tableRows, setTableRows] = useState(rowData);
   const [currentPage, setCurrentPage] = useState(1);
-  const allowPagination = useStore((state) => state.table.pagination.allowPagination);
-  const rowsPerPage = useStore((state) => state.table.pagination.rowsPerPage);
+  const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
+  const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
   // 每次操作完 pagination 后设置为 true
   const [resetScrollBar, setResetScrollBar] = useState(false);
 
@@ -118,7 +141,7 @@ export default function UniversityTable() {
   }, [resetScrollBar]);
 
   return (
-    <Flex direction="column" className="univ-table">
+    <div>
       <Typography.Title center level={2}>
         {titleName}
       </Typography.Title>
@@ -224,7 +247,7 @@ export default function UniversityTable() {
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field, index) => (
-                  <div className="adv-search-list-item" key={field.key}>
+                  <div className={classes.advSearchListItem} key={field.key}>
                     <Flex justify="between" align="center">
                       <Flex.Item>
                         <Typography.Title level={5}>搜索项目 {index + 1}</Typography.Title>
@@ -240,7 +263,7 @@ export default function UniversityTable() {
                         ) : null}
                       </Flex.Item>
                     </Flex>
-                    <div className="adv-search-list-item-control">
+                    <div className={classes.advSearchListItemBody}>
                       <Form.Item
                         rules={[{ required: true, message: '请选择一个搜索项' }]}
                         name={[field.name, 'advancedSearchOption']}
@@ -250,7 +273,7 @@ export default function UniversityTable() {
                         <UniversityTableAdvSearchOptionPicker
                           form={advancedSearchForm}
                           searchItemIndex={index}
-                          onChange={(value) => {
+                          resetSearchContentOnConfirm={(value) => {
                             const advancedSearchesValues =
                               advancedSearchForm.getFieldValue('advancedSearches');
                             if (value !== previousSearchItem?.current) {
@@ -336,7 +359,7 @@ export default function UniversityTable() {
                     </div>
                   </div>
                 ))}
-                <div className="adv-search-list-item-add">
+                <div className={classes.advSearchListItemAdd}>
                   <Button
                     round
                     block
@@ -356,7 +379,7 @@ export default function UniversityTable() {
         </Form>
       </Dialog>
 
-      <div className="univ-table-body">
+      <div className={classes.tableBody}>
         <Table>
           <Thead>
             <Tr>
@@ -378,10 +401,10 @@ export default function UniversityTable() {
       </div>
 
       {allowPagination ? (
-        <div className="univ-table-pagination">
+        <div className={classes.tablePagination}>
           <Pagination
             forceEllipses
-            totalItems={rowData.length}
+            totalItems={tableRows.length}
             itemsPerPage={rowsPerPage}
             value={currentPage}
             onChange={(nextPage) => {
@@ -391,6 +414,6 @@ export default function UniversityTable() {
           />
         </div>
       ) : null}
-    </Flex>
+    </div>
   );
 }

@@ -1,38 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavBar, Cell, Switch, Button, Dialog, Stepper, ActionSheet } from 'react-vant';
-import useStore from '../store';
 import { LocalStorageService } from '../services'
 import { CHARTS } from '../constants/store';
+import { createUseStyles } from 'react-jss'
+import { useSelector, useDispatch } from 'react-redux'
+
+const useStyles = createUseStyles({
+  footer: {
+    padding: '20px'
+  }
+})
 
 export default function Settings() {
+  const classes = useStyles()
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   // auth 相关状态与处理
   const [rememberToken, setRememberToken] = useState(LocalStorageService.getPersistAuth());
-  const logout = useStore((state) => state.authActions.logout);
   // pagination 相关状态与处理
-  const allowPagination = useStore((state) => state.table.pagination.allowPagination);
-  const setPagination = useStore((state) => state.tableActions.setAllowPagination);
-  const rowsPerPage = useStore((state) => state.table.pagination.rowsPerPage);
-  const setRowsPerPage = useStore((state) => state.tableActions.setRowsPerPage);
+  const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
+  const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
   // layout 相关状态与处理
   const [location985BarChartLayoutVisible, setLocation985BarChartLayoutVisible] = useState(false);
-  const location985BarChartLayout = useStore((state) => state.charts.location985.bar.layout);
-  const setLocation985BarChartLayout = useStore(
-    (state) => state.chartsActions.setLocation985BarChartLayout
-  );
+  const location985BarChartLayout = useSelector((state) => state.charts.location985.bar.layout);
   const [location211BarChartLayoutVisible, setLocation211BarChartLayoutVisible] = useState(false);
-  const location211BarChartLayout = useStore((state) => state.charts.location211.bar.layout);
-  const setLocation211BarChartLayout = useStore(
-    (state) => state.chartsActions.setLocation211BarChartLayout
-  );
+  const location211BarChartLayout = useSelector((state) => state.charts.location211.bar.layout);
   const [locationDoubleTopsBarChartLayoutVisible, setLocationDoubleTopsBarChartLayoutVisible] =
     useState(false);
-  const locationDoubleTopsBarChartLayout = useStore(
+  const locationDoubleTopsBarChartLayout = useSelector(
     (state) => state.charts.locationDoubleTops.bar.layout
-  );
-  const setLocationDoubleTopsBarChartLayout = useStore(
-    (state) => state.chartsActions.setLocationDoubleTopsBarChartLayout
   );
 
   // 实现 store 里状态与展示中文的对应
@@ -82,7 +79,7 @@ export default function Settings() {
             size={24}
             checked={allowPagination}
             onChange={(changedValue) => {
-              setPagination(changedValue);
+              dispatch.table.setAllowPagination(changedValue);
             }}
           />
         </Cell>
@@ -94,7 +91,7 @@ export default function Settings() {
             max={20}
             step={5}
             onChange={(value) => {
-              setRowsPerPage(value);
+              dispatch.table.setRowsPerPage(value);
             }}
           />
         </Cell>
@@ -114,7 +111,7 @@ export default function Settings() {
           visible={location985BarChartLayoutVisible}
           onSelect={(action, index) => {
             const newLayoutState = getSelectBarChartLayoutStateFromAction(action, index);
-            setLocation985BarChartLayout(newLayoutState);
+            dispatch.charts.setLocation985BarChartLayout(newLayoutState);
             setLocation985BarChartLayoutVisible(false);
           }}
           onCancel={() => {
@@ -136,7 +133,7 @@ export default function Settings() {
           visible={location211BarChartLayoutVisible}
           onSelect={(action, index) => {
             const newLayoutState = getSelectBarChartLayoutStateFromAction(action, index);
-            setLocation211BarChartLayout(newLayoutState);
+            dispatch.charts.setLocation211BarChartLayout(newLayoutState);
             setLocation211BarChartLayoutVisible(false);
           }}
           onCancel={() => {
@@ -158,7 +155,7 @@ export default function Settings() {
           visible={locationDoubleTopsBarChartLayoutVisible}
           onSelect={(action, index) => {
             const newLayoutState = getSelectBarChartLayoutStateFromAction(action, index);
-            setLocationDoubleTopsBarChartLayout(newLayoutState);
+            dispatch.charts.setLocationDoubleTopsBarChartLayout(newLayoutState);
             setLocationDoubleTopsBarChartLayoutVisible(false);
           }}
           onCancel={() => {
@@ -168,7 +165,7 @@ export default function Settings() {
         />
       </Cell.Group>
 
-      <div className="settings-footer">
+      <div className={classes.footer}>
         <Button
           type="primary"
           block
@@ -179,7 +176,7 @@ export default function Settings() {
               message: '您确定要登出吗?',
             })
               .then(() => {
-                logout();
+                dispatch.auth.logout();
                 // 需要移除持久化 auth
                 LocalStorageService.removePersistAuth();
                 navigate('/login', { replace: true });

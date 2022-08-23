@@ -2,20 +2,28 @@ import React from 'react';
 import { NavBar, Tabs, Typography } from 'react-vant';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval, Axis, TextGuide, ScrollBar, PieLabel } from '@antv/f2';
-import useStore from '../store';
 import { CHARTS } from '../constants/store';
+import { createUseStyles } from 'react-jss'
+import { useSelector } from 'react-redux'
 
 import locationData from '../data/locationData.json';
 
+const useStyles = createUseStyles({
+  chartsTitle: {
+    marginTop: '12px'
+  }
+})
+
 export default function UniversityTable() {
+  const classes = useStyles()
   const {
     211: location211Data,
     985: location985Data,
     doubleTops: locationDoubleTopsData,
   } = locationData;
-  const location985BarChartLayout = useStore((state) => state.charts.location985.bar.layout);
-  const location211BarChartLayout = useStore((state) => state.charts.location211.bar.layout);
-  const locationDoubleTopsBarChartLayout = useStore(
+  const location985BarChartLayout = useSelector((state) => state.charts.location985.bar.layout);
+  const location211BarChartLayout = useSelector((state) => state.charts.location211.bar.layout);
+  const locationDoubleTopsBarChartLayout = useSelector(
     (state) => state.charts.locationDoubleTops.bar.layout
   );
 
@@ -33,7 +41,7 @@ export default function UniversityTable() {
       <NavBar safeAreaInsetTop title="图表" leftArrow={false} />
       <Tabs active={0} sticky>
         <Tabs.TabPane title="985">
-          <Typography.Title center level={4} className="univ-charts-title">
+          <Typography.Title center level={4} className={classes.chartsTitle}>
             985高校地区分布柱状图
           </Typography.Title>
           <Canvas>

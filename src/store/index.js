@@ -1,14 +1,5 @@
-import create from 'zustand';
-import createAuth from './auth';
-import createTable from './table';
-import createCharts from './charts'
 
-const createRoot = (set, get) => ({
-  ...createAuth(set, get),
-  ...createTable(set, get),
-  ...createCharts(set, get)
-});
+import { init } from '@rematch/core';
+import { models } from '../models';
 
-const useStore = create(createRoot);
-
-export default useStore;
+export const store = init({ models: models });
