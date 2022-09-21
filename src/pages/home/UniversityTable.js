@@ -13,29 +13,51 @@ import {
   Icon,
   Button,
   Radio,
+  Cell,
+  Lazyload,
+  Sticky,
+  Empty,
+  Tag,
 } from 'react-vant';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
 import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
 import { createUseStyles } from 'react-jss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import titleData from '../data/titleData.json';
-import columnData from '../data/columnData.json';
-import rowData from '../data/rowData.json';
-import { searchOptions } from '../config/tableConfig';
+import titleData from '../../data/titleData.json';
+import columnData from '../../data/columnData.json';
+import rowData from '../../data/rowData.json';
+import { searchOptions } from '../../config/tableConfig';
 
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
-import '../styles/responsiveTable.override.css';
+import '../../styles/responsiveTable.override.css';
 
 const useStyles = createUseStyles({
+  header: {
+    padding: '20px 16px 16px 16px',
+    fontSize: '1.2em',
+    fontWeight: 400,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    position: 'relative',
+    backgroundColor: '#fff',
+  },
+  tags: {
+    backgroundColor: '#fff',
+    padding: '0 16px 10px 16px',
+  },
   tableBody: {
-    margin: '16px',
+    margin: (props) => (props.isTableCompact ? '16px' : '16px 0'),
   },
   tablePagination: {
-    marginLeft: '16px',
-    marginRight: '16px',
-    marginBottom: 'calc(var(--rv-tabbar-height) + 16px)',
+    margin: '16px',
+  },
+  highlightedSearchOption: {
+    color: '#ee0a24',
+  },
+  highlightedSearchValue: {
+    backgroundColor: '#ffff00',
   },
   advSearchListItem: {
     padding: '10px',
@@ -50,9 +72,9 @@ const useStyles = createUseStyles({
 });
 
 export default function UniversityTable() {
-  const classes = useStyles();
+  const dispatch = useDispatch();
   // 标题和更新日期
-  const [titleName, updateDate] = titleData;
+  const [titleName] = titleData;
   // 基本搜索
   const [searchUnivName, setSearchUnivName] = useState('');
   const [searchOption, setSearchOption] = useState({ value: 0 });
@@ -76,8 +98,17 @@ export default function UniversityTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
   const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
+  // 表格样式
+  const isTableCompact = useSelector((state) => state.table.tableStyle.compact);
   // 每次操作完 pagination 后设置为 true
   const [resetScrollBar, setResetScrollBar] = useState(false);
+  const classes = useStyles({ isTableCompact });
+  // 上一次的搜索历史, 初始显示所有数据
+  const [searchHistory, setSearchHistory] = useState({
+    searchStyle: 'N/A',
+    searchOptions: 'N/A',
+    result: `检索到 ${rowData.length} 条数据`,
+  });
 
   // pagination 下每一页展示的数据
   const tableRowsWithPagination = useMemo(
@@ -102,6 +133,13 @@ export default function UniversityTable() {
         message: `检索成功，共检索到 ${filteredRows.length} 条数据`,
         onClose: () => {
           setTableRows(filteredRows);
+          // 设置搜索历史, 这里注意不能使用 tableRows, 因为获取不到其最新值
+          searchUnivName &&
+            setSearchHistory({
+              searchStyle: '基本搜索',
+              searchOptions: `"${searchUnivName}" in "${columnData[searchOption.value]}"`,
+              result: `检索到 ${filteredRows.length} 条数据`,
+            });
         },
       });
     }
@@ -123,6 +161,23 @@ export default function UniversityTable() {
       message: `检索成功，共检索到 ${filteredRows.length} 条数据`,
       onClose: () => {
         setTableRows(filteredRows);
+        // 设置搜索历史, 这里注意不能使用 tableRows, 因为获取不到其最新值
+        setSearchHistory({
+          searchStyle: '高级搜索',
+          searchOptions: results.reduce(
+            (r, { advancedSearchOption, advancedSearchContent }, i, a) => {
+              r += dualSearchOptionsNames.includes(advancedSearchOption)
+                ? `("${advancedSearchOption}" = "${advancedSearchContent}")`
+                : `("${advancedSearchContent}" in "${advancedSearchOption}")`;
+              if (i !== a.length - 1) {
+                r += ' and ';
+              }
+              return r;
+            },
+            ''
+          ),
+          result: `检索到 ${filteredRows.length} 条数据`,
+        });
       },
     });
   };
@@ -140,55 +195,188 @@ export default function UniversityTable() {
     }
   }, [resetScrollBar]);
 
+  const renderTableBody = () => {
+    if (tableRows.length) {
+      if (isTableCompact) {
+        return (
+          <div className={classes.tableBody}>
+            <Table>
+              <Thead>
+                <Tr>
+                  {columnData.map((c, i) => (
+                    <Th key={i}>{c.toString()}</Th>
+                  ))}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {tableRowsWithPagination.map((rs, i) => (
+                  <Tr key={i}>
+                    {rs.map((r, index) => (
+                      <Td key={index}>{r}</Td>
+                    ))}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </div>
+        );
+      } else {
+        return (
+          <>
+            {tableRowsWithPagination.map((rs, rsIndex) => (
+              <Lazyload key={rsIndex}>
+                <Cell.Group inset className={classes.tableBody}>
+                  {rs.map((info, i) => (
+                    <Cell
+                      border={[2, 8, 16, 20].includes(i) ? true : false}
+                      key={i}
+                      title={columnData[i]}
+                      titleClass={
+                        searchUnivName && searchOption.value === i
+                          ? classes.highlightedSearchOption
+                          : ''
+                      }
+                    >
+                      {searchUnivName && searchOption.value === i ? (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: info.replace(searchUnivName, `<mark>${searchUnivName}</mark>`),
+                          }}
+                        />
+                      ) : (
+                        <div>{info}</div>
+                      )}
+                    </Cell>
+                  ))}
+                </Cell.Group>
+              </Lazyload>
+            ))}
+          </>
+        );
+      }
+    } else {
+      // 数据为空
+      return <Empty description="暂无相关数据" />;
+    }
+  };
+
   return (
     <div>
-      <Typography.Title center level={2}>
-        {titleName}
-      </Typography.Title>
-      <Typography.Title center level={4}>
-        {updateDate}
-      </Typography.Title>
+      <Sticky>
+        <header className={classes.header}>
+          <Flex justify="between">
+            <Flex.Item>{titleName}</Flex.Item>
+            <Flex.Item>
+              <Icon
+                name="points"
+                badge={{ content: tableRows.length }}
+                onClick={() => {
+                  Dialog.alert({
+                    title: '当前搜索情况与结果',
+                    children: (
+                      <Cell.Group inset>
+                        <Cell title="搜索形式" value={searchHistory.searchStyle} />
+                        <Cell title="搜索条件" value={searchHistory.searchOptions} />
+                        <Cell title="搜索结果" value={searchHistory.result} />
+                      </Cell.Group>
+                    ),
+                  });
+                }}
+              />
+            </Flex.Item>
+          </Flex>
+        </header>
 
-      <Search
-        leftIcon={<div>&nbsp;</div>}
-        rightIcon={
-          <Icon
-            onClick={() => {
-              handleSearch(searchUnivName);
-            }}
-            name="search"
-          />
-        }
-        showAction
-        actionText={
-          <div
-            onClick={() => {
-              setShowAdvancedSearchDialog(true);
-            }}
-          >
-            高级搜索
-          </div>
-        }
-        label={
-          <div
-            onClick={() => {
-              setShowSearchOptionsPicker(true);
-            }}
-          >
-            {Object.keys(searchOption).length > 0
-              ? searchOptions.find((s) => s.value === searchOption.value).text
-              : '请选择'}
-          </div>
-        }
-        // shape="round"
-        value={searchUnivName}
-        onChange={setSearchUnivName}
-        placeholder="请输入搜索条件"
-        onClear={() => {
-          setSearchUnivName('');
-        }}
-        onSearch={handleSearch}
-      />
+        <Search
+          leftIcon={<div>&nbsp;</div>}
+          rightIcon={
+            <Icon
+              onClick={() => {
+                handleSearch(searchUnivName);
+              }}
+              name="search"
+            />
+          }
+          showAction
+          actionText={
+            <div
+              onClick={() => {
+                setShowAdvancedSearchDialog(true);
+              }}
+            >
+              高级搜索
+            </div>
+          }
+          label={
+            <div
+              onClick={() => {
+                setShowSearchOptionsPicker(true);
+              }}
+            >
+              {Object.keys(searchOption).length > 0
+                ? searchOptions.find((s) => s.value === searchOption.value).text
+                : '请选择'}
+            </div>
+          }
+          shape="round"
+          value={searchUnivName}
+          onChange={setSearchUnivName}
+          placeholder="请输入搜索条件"
+          onClear={() => {
+            setSearchUnivName('');
+          }}
+          onSearch={handleSearch}
+        />
+
+        <Flex gutter={8} className={classes.tags}>
+          <Flex.Item>
+            <Tag
+              onClick={() => {
+                setTableRows(rowData);
+                Toast.success({
+                  message: '重设表格成功',
+                });
+              }}
+              size="medium"
+              type="default"
+            >
+              重设表格
+            </Tag>
+          </Flex.Item>
+          <Flex.Item>
+            <Tag
+              onClick={() => {
+                window.scrollTo({ top: document.body.scrollHeight });
+              }}
+              size="medium"
+              type="default"
+            >
+              滑直底部
+            </Tag>
+          </Flex.Item>
+          <Flex.Item>
+            <Tag
+              onClick={() => {
+                if (allowPagination) {
+                  dispatch.table.setAllowPagination(false);
+                  Toast.success({
+                    message: '关闭分页成功',
+                  });
+                } else {
+                  dispatch.table.setAllowPagination(true);
+                  Toast.success({
+                    message: '开启分页成功',
+                  });
+                }
+              }}
+              size="medium"
+              type={allowPagination ? 'success' : 'default'}
+            >
+              {allowPagination ? '关闭分页' : '开启分页'}
+            </Tag>
+          </Flex.Item>
+        </Flex>
+      </Sticky>
 
       <Popup
         safeAreaInsetBottom
@@ -379,26 +567,8 @@ export default function UniversityTable() {
         </Form>
       </Dialog>
 
-      <div className={classes.tableBody}>
-        <Table>
-          <Thead>
-            <Tr>
-              {columnData.map((c, i) => (
-                <Th key={i}>{c.toString()}</Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {tableRowsWithPagination.map((rs, i) => (
-              <Tr key={i}>
-                {rs.map((r, index) => (
-                  <Td key={index}>{r}</Td>
-                ))}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </div>
+      {/* 渲染表格数据 */}
+      {renderTableBody()}
 
       {allowPagination ? (
         <div className={classes.tablePagination}>

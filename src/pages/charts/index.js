@@ -1,21 +1,21 @@
 import React from 'react';
 import { NavBar, Tabs, Typography } from 'react-vant';
-import Canvas from '@antv/f2-react';
 import { Chart, Interval, Axis, TextGuide, ScrollBar, PieLabel } from '@antv/f2';
-import { CHARTS } from '../constants/store';
-import { createUseStyles } from 'react-jss'
-import { useSelector } from 'react-redux'
+import { CHARTS } from '../../constants/store';
+import { createUseStyles } from 'react-jss';
+import { useSelector } from 'react-redux';
+import CanvasImage from './CanvasImage';
 
-import locationData from '../data/locationData.json';
+import locationData from '../../data/locationData.json';
 
 const useStyles = createUseStyles({
   chartsTitle: {
-    marginTop: '12px'
-  }
-})
+    marginTop: '12px',
+  },
+});
 
-export default function UniversityTable() {
-  const classes = useStyles()
+export default function Charts() {
+  const classes = useStyles();
   const {
     211: location211Data,
     985: location985Data,
@@ -44,7 +44,7 @@ export default function UniversityTable() {
           <Typography.Title center level={4} className={classes.chartsTitle}>
             985高校地区分布柱状图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={
                 getLocationBarChartLayoutStateToData(location985Data)[location985BarChartLayout]
@@ -59,19 +59,18 @@ export default function UniversityTable() {
                   key={item.location}
                   records={[item]}
                   content={`${item.count}`}
-                  attrs={{ fill: '#000', fontSize: '24px' }}
+                  attrs={{ fill: '#c71a5c', fontSize: '24px' }}
                   offsetY={-10}
                   offsetX={-5}
                 />
               ))}
               <ScrollBar mode="x" range={[0, 0.4]} />
             </Chart>
-          </Canvas>
-
-          <Typography.Title level={4} center className="univ-charts-title">
+          </CanvasImage>
+          <Typography.Title level={4} center className={classes.chartsTitle}>
             985高校地区分布饼图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={location985Data.pie}
               coord={{
@@ -99,14 +98,14 @@ export default function UniversityTable() {
                 }}
               />
             </Chart>
-          </Canvas>
+          </CanvasImage>
         </Tabs.TabPane>
 
         <Tabs.TabPane title="211">
-          <Typography.Title level={4} center className="univ-charts-title">
+          <Typography.Title level={4} center className={classes.chartsTitle}>
             211高校地区分布柱状图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={
                 getLocationBarChartLayoutStateToData(location211Data)[location211BarChartLayout]
@@ -128,12 +127,12 @@ export default function UniversityTable() {
               ))}
               <ScrollBar mode="x" range={[0, 0.4]} />
             </Chart>
-          </Canvas>
+          </CanvasImage>
 
-          <Typography.Title level={4} center className="univ-charts-title">
+          <Typography.Title level={4} center className={classes.chartsTitle}>
             211高校地区分布饼图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={location211Data.pie}
               coord={{
@@ -161,14 +160,14 @@ export default function UniversityTable() {
                 }}
               />
             </Chart>
-          </Canvas>
+          </CanvasImage>
         </Tabs.TabPane>
 
         <Tabs.TabPane title="2022双一流">
-          <Typography.Title level={4} center className="univ-charts-title">
+          <Typography.Title level={4} center className={classes.chartsTitle}>
             2022双一流高校地区分布柱状图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={
                 getLocationBarChartLayoutStateToData(locationDoubleTopsData)[
@@ -192,12 +191,12 @@ export default function UniversityTable() {
               ))}
               <ScrollBar mode="x" range={[0, 0.4]} />
             </Chart>
-          </Canvas>
+          </CanvasImage>
 
-          <Typography.Title level={4} center className="univ-charts-title">
+          <Typography.Title level={4} center className={classes.chartsTitle}>
             2022双一流高校地区分布饼图
           </Typography.Title>
-          <Canvas>
+          <CanvasImage>
             <Chart
               data={locationDoubleTopsData.pie}
               coord={{
@@ -225,7 +224,7 @@ export default function UniversityTable() {
                 }}
               />
             </Chart>
-          </Canvas>
+          </CanvasImage>
         </Tabs.TabPane>
       </Tabs>
     </div>

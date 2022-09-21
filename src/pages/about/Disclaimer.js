@@ -3,23 +3,25 @@ import { NavBar, Typography } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 
-import updateData from '../data/updateData.json';
+import disclaimerData from '../../data/disclaimerData.json';
 
 const useStyles = createUseStyles({
-  updateLogsBody: {
+  disclaimerBody: {
     margin: '0 20px 20px 20px',
     '& li': {
       listStyle: 'circle',
-      marginLeft: '30px',
+      marginLeft: '20px',
+      marginBottom: '10px',
     },
-    // 覆盖 react-vant 默认 Typography.Text 的 display: inline-block 
+    // 覆盖 react-vant 默认 Typography.Text 的 display: inline-block
     '& .rv-typography--text': {
       display: 'block',
     },
   },
 });
 
-export default function UpdateLogs() {
+// 免责声明
+export default function Disclaimer() {
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -27,7 +29,7 @@ export default function UpdateLogs() {
     <div>
       <NavBar
         safeAreaInsetTop
-        title="更新日志"
+        title="免责声明"
         leftArrow
         leftText="返回"
         onClickLeft={() => {
@@ -35,20 +37,15 @@ export default function UpdateLogs() {
         }}
       />
       <Typography.Title level={2} center>
-        更新日志
+        免责声明
       </Typography.Title>
-      {updateData.map(([title, logs], index) => (
-        <div key={index} className={classes.updateLogsBody}>
-          <Typography.Title level={4}>{title}</Typography.Title>
-          <ul>
-            {logs.split('；').map((log, i) => (
-              <li key={i}>
-                <Typography.Text>{log}</Typography.Text>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <ol className={classes.disclaimerBody}>
+        {disclaimerData.map((v, i) => (
+          <li key={i}>
+            <Typography.Text>{v}</Typography.Text>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

@@ -2,16 +2,15 @@ import React from 'react';
 import { useRoutes, useNavigate, useLocation } from 'react-router-dom';
 import { Tabbar } from 'react-vant';
 import { routesConfig } from '../routes';
-import {createUseStyles} from 'react-jss'
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   app: {
-    marginBottom: '26px'
-  }
-})
+  },
+});
 
 function App() {
-  const classes = useStyles()
+  const classes = useStyles();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const routes = useRoutes(routesConfig);
@@ -21,6 +20,8 @@ function App() {
       {routes}
 
       <Tabbar
+        // placeholder 用于生成等高的占位符
+        placeholder
         safeAreaInsetBottom
         fixed
         value={`/${pathname.split('/')[1]}`}
@@ -30,6 +31,9 @@ function App() {
       >
         <Tabbar.Item name="/" icon="home-o">
           主页
+        </Tabbar.Item>
+        <Tabbar.Item name="/reference" icon="guide-o">
+          索引
         </Tabbar.Item>
         <Tabbar.Item name="/charts" icon="bar-chart-o">
           图表

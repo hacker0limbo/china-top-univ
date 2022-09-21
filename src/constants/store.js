@@ -14,3 +14,18 @@ export const CHARTS = {
     },
   },
 };
+
+export const LANGUAGES = {
+  ENUS: {
+    STATE: 'enUS',
+    TEXT: 'English'
+  },
+  ZHCN: {
+    STATE: 'zhCN',
+    TEXT: '简体中文'
+  },
+  ZHHK: {
+    STATE: 'zhHK',
+    TEXT: '繁體中文'
+  }
+}

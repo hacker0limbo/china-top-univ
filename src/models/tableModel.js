@@ -8,6 +8,10 @@ export const tableModel = {
       allowPagination: false,
       rowsPerPage: 5,
     },
+    tableStyle: {
+      // 是否为紧凑型的原始样式
+      compact: false,
+    },
   },
   reducers: {
     setAllowPagination: (state, payload) => {
@@ -25,6 +29,15 @@ export const tableModel = {
         pagination: {
           ...state.pagination,
           rowsPerPage: payload,
+        },
+      };
+    },
+    setTableStyle: (state, payload) => {
+      return {
+        ...state,
+        tableStyle: {
+          ...state.tableStyle,
+          compact: payload,
         },
       };
     },

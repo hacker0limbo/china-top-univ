@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Field, Picker, Popup } from 'react-vant';
 
-import { searchOptions } from '../config/tableConfig';
+import { searchOptions } from '../../config/tableConfig';
 
 // 搜索项的 picker 组件
 export default function UniversityTableAdvSearchOptionPicker(props) {
