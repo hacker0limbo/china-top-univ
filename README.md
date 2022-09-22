@@ -54,3 +54,7 @@ zustand 用下来有几点感受:
 - ~~zustand 替换成 rematch~~
 - ~~代码分离, 区分为页面和组件~~
 - react-vant 升级为 v2 -> v3
+  - icon
+  - 表单需要加上 cell
+  - css 无需手动引入
+  - cell card 类型从 inset 改成 card

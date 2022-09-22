@@ -29,14 +29,14 @@ function App() {
           navigate(v);
         }}
       >
-        <Tabbar.Item name="/" icon="home-o">
-          主页
+        <Tabbar.Item name="/charts" icon="bar-chart-o">
+          图表
         </Tabbar.Item>
         <Tabbar.Item name="/reference" icon="guide-o">
           索引
         </Tabbar.Item>
-        <Tabbar.Item name="/charts" icon="bar-chart-o">
-          图表
+        <Tabbar.Item name="/" icon="home-o">
+          主页
         </Tabbar.Item>
         <Tabbar.Item name="/about" icon="info-o">
           关于
