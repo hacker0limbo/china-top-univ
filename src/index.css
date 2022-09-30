@@ -1,4 +1,19 @@
 /* 全局样式, 每个组件局部样式均使用 react-jss 写在组件内部 */
-body {
+html {
   background-color: #f7f7f7;
 }
+
+html[theme='dark-mode'] {
+  filter: invert(87%) hue-rotate(180deg);
+  box-shadow: none;
+}
+
+html[theme='dark-mode'] img {
+  filter: invert(87%) hue-rotate(180deg);
+  opacity: 0.75;
+}
+
+html {
+  transition: color 300ms, background-color 300ms;
+}
+

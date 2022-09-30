@@ -10,3 +10,10 @@ export const searchOptions = [
   { text: '211', value: 11, isDual: true },
   { text: '2022雙一流', value: 14, isDual: true },
 ];
+
+// 表格定制化分隔符, 存取的数据为 column 索引
+// 依次为: [學校標識碼, 辦學模式, 2022雙一流警/撤, USNEWS 2022]
+export const tableSeparators = [2, 8, 16, 20]
+
+// 定制化需求, 2017雙一流 和 2017雙一流學科所在的位置
+export const doubleTops2017Range = [12, 13]

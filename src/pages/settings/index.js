@@ -20,11 +20,14 @@ export default function Settings() {
   const [rememberToken, setRememberToken] = useState(LocalStorageService.getPersistAuth());
   // 多语言
   const language = useSelector((state) => state.i18n.language);
+  // 主题
+  const darkMode = useSelector((state) => state.theme.darkMode);
+  // 表格数据展示
+  const showInvalidData = useSelector((state) => state.table.tableData.showInvalidData);
+  const showDoubleTops2017Data = useSelector((state) => state.table.tableData.showDoubleTops2017Data);
   // pagination 相关状态与处理
   const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
   const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
-  // 表格样式
-  const isTableCompact = useSelector((state) => state.table.tableStyle.compact)
   // layout 相关状态与处理
   const [location985BarChartLayoutVisible, setLocation985BarChartLayoutVisible] = useState(false);
   const location985BarChartLayout = useSelector((state) => state.charts.location985.bar.layout);
@@ -108,29 +111,38 @@ export default function Settings() {
             navigate('languages');
           }}
         />
-        <Cell
-          onClick={() =>
-            Toast.info({
-              message: '黑暗模式暂未实现, 敬请期待',
-            })
-          }
-          center
-          title="黑暗模式"
-        >
-          <Switch size={24} disabled />
+        <Cell center title="黑暗模式" label="暗黑模式暂未全部完成">
+          <Switch
+            size={24}
+            checked={darkMode}
+            onChange={(changedValue) => {
+              dispatch.theme.setDarkMode(changedValue);
+            }}
+          />
         </Cell>
       </Cell.Group>
 
       <Cell.Group title="表格">
-        <Cell center title="紧凑型表格">
+        <Cell center title="显示无效数据">
           <Switch
             size={24}
-            checked={isTableCompact}
+            checked={showInvalidData}
             onChange={(changedValue) => {
-              dispatch.table.setTableStyle(changedValue);
+              dispatch.table.toggleInvalidData(changedValue);
             }}
           />
         </Cell>
+
+        <Cell center title="显示2017双一流数据">
+          <Switch
+            size={24}
+            checked={showDoubleTops2017Data}
+            onChange={(changedValue) => {
+              dispatch.table.toggleDoubleTops2017Data(changedValue);
+            }}
+          />
+        </Cell>
+
         <Cell center title="显示分页">
           <Switch
             size={24}
@@ -152,10 +164,22 @@ export default function Settings() {
             }}
           />
         </Cell>
+
+        <Cell
+          center
+          title="预览新数据"
+          isLink
+          label="上传并预览新数据"
+          onClick={() => {
+            navigate('upload');
+          }}
+        />
+
       </Cell.Group>
 
       <Cell.Group title="图表">
         <Cell
+          center
           onClick={() => {
             setLocation985BarChartLayoutVisible(true);
           }}
@@ -182,6 +206,7 @@ export default function Settings() {
         />
 
         <Cell
+          center
           onClick={() => {
             setLocation211BarChartLayoutVisible(true);
           }}
@@ -208,6 +233,7 @@ export default function Settings() {
         />
 
         <Cell
+          center
           onClick={() => {
             setLocationDoubleTopsBarChartLayoutVisible(true);
           }}

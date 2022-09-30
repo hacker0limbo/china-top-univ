@@ -8,9 +8,9 @@ export const tableModel = {
       allowPagination: false,
       rowsPerPage: 5,
     },
-    tableStyle: {
-      // 是否为紧凑型的原始样式
-      compact: false,
+    tableData: {
+      showInvalidData: false,
+      showDoubleTops2017Data: false,
     },
   },
   reducers: {
@@ -32,12 +32,21 @@ export const tableModel = {
         },
       };
     },
-    setTableStyle: (state, payload) => {
+    toggleInvalidData: (state, payload) => {
       return {
         ...state,
-        tableStyle: {
-          ...state.tableStyle,
-          compact: payload,
+        tableData: {
+          ...state.tableData,
+          showInvalidData: payload,
+        },
+      };
+    },
+    toggleDoubleTops2017Data: (state, payload) => {
+      return {
+        ...state,
+        tableData: {
+          ...state.tableData,
+          showDoubleTops2017Data: payload,
         },
       };
     },

@@ -13,7 +13,7 @@ export default function About() {
       <NavBar safeAreaInsetTop title="关于" leftArrow={false} />
       <Cell.Group title="项目组成员">
         <Cell
-          title="平臺製作"
+          title="平台制作"
           isLink
           value="Limboer"
           onClick={() => {
@@ -21,7 +21,7 @@ export default function About() {
           }}
         />
         <Cell
-          title="數據整理"
+          title="数据整理"
           isLink
           value="ikimsam"
           onClick={() => {
@@ -31,6 +31,13 @@ export default function About() {
       </Cell.Group>
 
       <Cell.Group title="项目信息">
+        <Cell
+          title="技术框架"
+          isLink
+          onClick={() => {
+            navigate('technology')
+          }}
+        />
         <Cell
           title="项目源码"
           isLink

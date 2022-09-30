@@ -18,8 +18,9 @@ import {
   Sticky,
   Empty,
   Tag,
+  DropdownMenu,
+  Switch,
 } from 'react-vant';
-import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
 import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
 import { createUseStyles } from 'react-jss';
@@ -28,27 +29,34 @@ import { useSelector, useDispatch } from 'react-redux';
 import titleData from '../../data/titleData.json';
 import columnData from '../../data/columnData.json';
 import rowData from '../../data/rowData.json';
-import { searchOptions } from '../../config/tableConfig';
-
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
-import '../../styles/responsiveTable.override.css';
+import { searchOptions, tableSeparators, doubleTops2017Range } from '../../config/tableConfig';
 
 const useStyles = createUseStyles({
   header: {
-    padding: '20px 16px 16px 16px',
-    fontSize: '1.2em',
+    padding: '20px 16px 10px 16px',
+    fontSize: '1.1em',
     fontWeight: 400,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     position: 'relative',
     backgroundColor: '#fff',
   },
+  settings: {
+    display: 'inline-block',
+    '& .rv-dropdown-menu__bar': {
+      backgroundColor: 'inherit',
+      boxShadow: 'none',
+    },
+    '& .rv-dropdown-menu__title:after': {
+      content: 'none',
+    },
+  },
   tags: {
     backgroundColor: '#fff',
     padding: '0 16px 10px 16px',
   },
   tableBody: {
-    margin: (props) => (props.isTableCompact ? '16px' : '16px 0'),
+    margin: '16px 0',
   },
   tablePagination: {
     margin: '16px',
@@ -72,6 +80,7 @@ const useStyles = createUseStyles({
 });
 
 export default function UniversityTable() {
+  const classes = useStyles();
   const dispatch = useDispatch();
   // 标题和更新日期
   const [titleName] = titleData;
@@ -96,13 +105,15 @@ export default function UniversityTable() {
   // 表格分页和数据
   const [tableRows, setTableRows] = useState(rowData);
   const [currentPage, setCurrentPage] = useState(1);
+  // 表格数据展示
+  const showInvalidData = useSelector((state) => state.table.tableData.showInvalidData);
+  const showDoubleTops2017Data = useSelector(
+    (state) => state.table.tableData.showDoubleTops2017Data
+  );
   const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
   const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
-  // 表格样式
-  const isTableCompact = useSelector((state) => state.table.tableStyle.compact);
   // 每次操作完 pagination 后设置为 true
   const [resetScrollBar, setResetScrollBar] = useState(false);
-  const classes = useStyles({ isTableCompact });
   // 上一次的搜索历史, 初始显示所有数据
   const [searchHistory, setSearchHistory] = useState({
     searchStyle: 'N/A',
@@ -195,40 +206,31 @@ export default function UniversityTable() {
     }
   }, [resetScrollBar]);
 
+  // 渲染表格, 由于渲染时包含逻辑处理, 所以抽成一个函数
   const renderTableBody = () => {
     if (tableRows.length) {
-      if (isTableCompact) {
-        return (
-          <div className={classes.tableBody}>
-            <Table>
-              <Thead>
-                <Tr>
-                  {columnData.map((c, i) => (
-                    <Th key={i}>{c.toString()}</Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {tableRowsWithPagination.map((rs, i) => (
-                  <Tr key={i}>
-                    {rs.map((r, index) => (
-                      <Td key={index}>{r}</Td>
-                    ))}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </div>
-        );
-      } else {
-        return (
-          <>
-            {tableRowsWithPagination.map((rs, rsIndex) => (
-              <Lazyload key={rsIndex}>
-                <Cell.Group inset className={classes.tableBody}>
-                  {rs.map((info, i) => (
+      return (
+        <>
+          {tableRowsWithPagination.map((rs, rsIndex) => (
+            <Lazyload key={rsIndex}>
+              <Cell.Group inset className={classes.tableBody}>
+                {rs.map((info, i) => {
+                  if (!showInvalidData && info === 'N/A') {
+                    return null;
+                  }
+
+                  if (!showDoubleTops2017Data && doubleTops2017Range.includes(i)) {
+                    return null;
+                  }
+
+                  return (
                     <Cell
-                      border={[2, 8, 16, 20].includes(i) ? true : false}
+                      border={
+                        tableSeparators.includes(i) ||
+                        (!showInvalidData && rs[i + 1] === 'N/A' && tableSeparators.includes(i + 1))
+                          ? true
+                          : false
+                      }
                       key={i}
                       title={columnData[i]}
                       titleClass={
@@ -247,13 +249,13 @@ export default function UniversityTable() {
                         <div>{info}</div>
                       )}
                     </Cell>
-                  ))}
-                </Cell.Group>
-              </Lazyload>
-            ))}
-          </>
-        );
-      }
+                  );
+                })}
+              </Cell.Group>
+            </Lazyload>
+          ))}
+        </>
+      );
     } else {
       // 数据为空
       return <Empty description="暂无相关数据" />;
@@ -264,10 +266,42 @@ export default function UniversityTable() {
     <div>
       <Sticky>
         <header className={classes.header}>
-          <Flex justify="between">
+          <Flex justify="between" align="baseline">
             <Flex.Item>{titleName}</Flex.Item>
             <Flex.Item>
+              <DropdownMenu className={classes.settings}>
+                <DropdownMenu.Item title={<Icon size="20" name="setting-o" />}>
+                  <Cell center title="显示无效数据">
+                    <Switch
+                      checked={showInvalidData}
+                      size={24}
+                      onChange={(checkedValue) => {
+                        dispatch.table.toggleInvalidData(checkedValue);
+                      }}
+                    />
+                  </Cell>
+                  <Cell center title="显示2017双一流数据">
+                    <Switch
+                      size={24}
+                      checked={showDoubleTops2017Data}
+                      onChange={(checkedValue) => {
+                        dispatch.table.toggleDoubleTops2017Data(checkedValue);
+                      }}
+                    />
+                  </Cell>
+                  <Cell center title="开启分页">
+                    <Switch
+                      size={24}
+                      checked={allowPagination}
+                      onChange={(checkedValue) => {
+                        dispatch.table.setAllowPagination(checkedValue);
+                      }}
+                    />
+                  </Cell>
+                </DropdownMenu.Item>
+              </DropdownMenu>
               <Icon
+                size="20"
                 name="points"
                 badge={{ content: tableRows.length }}
                 onClick={() => {
@@ -328,7 +362,7 @@ export default function UniversityTable() {
           onSearch={handleSearch}
         />
 
-        <Flex gutter={8} className={classes.tags}>
+        <Flex gutter={8} className={classes.tags} align="center">
           <Flex.Item>
             <Tag
               onClick={() => {
@@ -352,27 +386,6 @@ export default function UniversityTable() {
               type="default"
             >
               滑直底部
-            </Tag>
-          </Flex.Item>
-          <Flex.Item>
-            <Tag
-              onClick={() => {
-                if (allowPagination) {
-                  dispatch.table.setAllowPagination(false);
-                  Toast.success({
-                    message: '关闭分页成功',
-                  });
-                } else {
-                  dispatch.table.setAllowPagination(true);
-                  Toast.success({
-                    message: '开启分页成功',
-                  });
-                }
-              }}
-              size="medium"
-              type={allowPagination ? 'success' : 'default'}
-            >
-              {allowPagination ? '关闭分页' : '开启分页'}
             </Tag>
           </Flex.Item>
         </Flex>
