@@ -32,7 +32,6 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ## In Progress
 
-- [ ] 取消显示分割线
 - [ ] 数据更新
   - [ ] 主页搜索条件对应字段的索引位置
   - [ ] 主页表格展示的分割线对应其上字段的索引位置
@@ -40,11 +39,12 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ## Done ✓
 
+- [x] 取消显示分割线
 - [x] React 升级为最新
 - [x] React Router 升级到最新
   - [x] 增加登录后重定向功能
 - [x] 暗黑主题
-  - [x] 可根据系统主题适配: https://stackoverflow.com/a/57795495
+  - [x] 可根据系统主题适配
 - [x] 多维联动搜索
 - [x] 索引页面
 - [x] 图表页面
