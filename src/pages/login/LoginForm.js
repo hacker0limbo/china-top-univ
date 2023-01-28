@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Field, Form, Toast } from 'react-vant';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import { useDispatch } from 'react-redux';
 
@@ -18,6 +18,8 @@ export default function LoginForm() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { search } = useLocation();
+  const redirectUrl = useMemo(() => new URLSearchParams(search).get('redirect'), [search]);
 
   const onFinish = (values) => {
     const { token } = values;
@@ -26,7 +28,11 @@ export default function LoginForm() {
         message: '秘钥正确',
         onClose: () => {
           dispatch.auth.login();
-          navigate('/');
+          if (redirectUrl) {
+            navigate(redirectUrl);
+          } else {
+            navigate('/');
+          }
         },
       });
     } else {

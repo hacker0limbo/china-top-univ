@@ -7,15 +7,15 @@ const useStyles = createUseStyles({
   previewImage: {
     // 设置 preview 的背景为白色
     '& img': {
-      backgroundColor: '#fff'
-    }  
+      backgroundColor: 'var(--rv-white)',
+    },
   },
-})
+});
 
 // 将 canvas 配置成可点击后开启 image preview 的组件
 export default function CanvasImage({ children, ...canvasProps }) {
   const canvasRef = useRef(null);
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
     <div
@@ -26,7 +26,7 @@ export default function CanvasImage({ children, ...canvasProps }) {
           ImagePreview.open({
             closeable: true,
             images: [img],
-            className: classes.previewImage
+            className: classes.previewImage,
           });
         }
       }}

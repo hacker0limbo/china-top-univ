@@ -24,6 +24,8 @@ export default function Feedback() {
   const emailjsTemplateKey = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
   const emailjsServiceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
 
+  console.log(Form);
+
   return (
     <div>
       <NavBar

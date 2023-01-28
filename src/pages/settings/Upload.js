@@ -17,7 +17,7 @@ import * as XLSX from 'xlsx';
 
 const useStyles = createUseStyles({
   uploadSection: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--rv-white)',
     borderRadius: '4px',
   },
   upload: {

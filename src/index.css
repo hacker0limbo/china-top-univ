@@ -1,19 +1,4 @@
-/* 全局样式, 每个组件局部样式均使用 react-jss 写在组件内部 */
-html {
-  background-color: #f7f7f7;
+/* TODO, react-vant 1.0 需要手动设置该样式, 2.0 及以上 已适配完成 */
+.rv-picker__mask {
+  background-image: var(--rv-picker-mask-background-image);
 }
-
-html[theme='dark-mode'] {
-  filter: invert(87%) hue-rotate(180deg);
-  box-shadow: none;
-}
-
-html[theme='dark-mode'] img {
-  filter: invert(87%) hue-rotate(180deg);
-  opacity: 0.75;
-}
-
-html {
-  transition: color 300ms, background-color 300ms;
-}
-

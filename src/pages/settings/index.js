@@ -16,15 +16,19 @@ export default function Settings() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const authed = useSelector((state) => state.auth.authed);
   // auth 相关状态与处理
   const [rememberToken, setRememberToken] = useState(LocalStorageService.getPersistAuth());
   // 多语言
   const language = useSelector((state) => state.i18n.language);
   // 主题
   const darkMode = useSelector((state) => state.theme.darkMode);
+  const autoTheme = useSelector((state) => state.theme.auto);
   // 表格数据展示
   const showInvalidData = useSelector((state) => state.table.tableData.showInvalidData);
-  const showDoubleTops2017Data = useSelector((state) => state.table.tableData.showDoubleTops2017Data);
+  const showDoubleTops2017Data = useSelector(
+    (state) => state.table.tableData.showDoubleTops2017Data
+  );
   // pagination 相关状态与处理
   const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
   const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
@@ -85,6 +89,54 @@ export default function Settings() {
     () => Object.values(LANGUAGES).filter(({ STATE, TEXT }) => STATE === language)[0]['TEXT'],
     [language]
   );
+
+  // 无需验证即能进行的设置
+  const sharedSettings = (
+    <>
+      <Cell.Group title="通用">
+        <Cell
+          title="多语言"
+          isLink
+          value={currentLanguage}
+          onClick={() => {
+            navigate('languages');
+          }}
+        />
+      </Cell.Group>
+
+      <Cell.Group title="主题">
+        <Cell center title="跟随系统" label="跟随系统主题自动切换">
+          <Switch
+            size={24}
+            checked={autoTheme}
+            onChange={(changedValue) => {
+              dispatch.theme.setAuto(changedValue);
+            }}
+          />
+        </Cell>
+        {autoTheme ? null : (
+          <Cell center title="黑暗模式" label="开启可切换为黑暗模式">
+            <Switch
+              size={24}
+              checked={darkMode}
+              onChange={(changedValue) => {
+                dispatch.theme.setDarkMode(changedValue);
+              }}
+            />
+          </Cell>
+        )}
+      </Cell.Group>
+    </>
+  );
+
+  if (!authed) {
+    return (
+      <div>
+        <NavBar safeAreaInsetTop title="设置" leftArrow={false} />
+        {sharedSettings}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -174,7 +226,6 @@ export default function Settings() {
             navigate('upload');
           }}
         />
-
       </Cell.Group>
 
       <Cell.Group title="图表">

@@ -1,35 +1,72 @@
-import React, { useEffect } from 'react';
-import { useRoutes, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { Tabbar } from 'react-vant';
-import { routesConfig } from '../routes';
 import { createUseStyles } from 'react-jss';
 import { useSelector } from 'react-redux';
+import { themeVars } from '../theme';
 
 const useStyles = createUseStyles({
-  app: {
-  },
+  app: {},
 });
 
 function App() {
   const classes = useStyles();
   const navigate = useNavigate();
-  const darkMode = useSelector(state => state.theme.darkMode)
+  const darkMode = useSelector((state) => state.theme.darkMode);
+  const autoTheme = useSelector((state) => state.theme.auto);
   const { pathname } = useLocation();
-  const routes = useRoutes(routesConfig);
+  const [systemDarkMode, setSystemDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
 
-  // 设置主题, 每次 app 运行时候根据主题设置 html 属性
-  useEffect(() => {
-    const html = document.querySelector('html')
-    if (darkMode) {
-      html.setAttribute('theme', 'dark-mode')
+  const toggleTheme = useCallback((isDark) => {
+    if (isDark) {
+      Object.entries(themeVars.dark).forEach(([k, v]) => {
+        document.documentElement.style.setProperty(k, v);
+      });
     } else {
-      html.removeAttribute('theme')
+      Object.entries(themeVars.light).forEach(([k, v]) => {
+        document.documentElement.style.setProperty(k, v);
+      });
     }
-  }, [darkMode])
+  }, []);
+
+  useEffect(() => {
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      setSystemDarkMode(event.matches);
+    });
+  }, []);
+
+  // 初始化时设置主题
+  useEffect(() => {
+    // auto 为 true 时根据系统主题, 为 false 时根据用户定义的主题
+    if (autoTheme) {
+      toggleTheme(systemDarkMode);
+    } else {
+      toggleTheme(darkMode);
+    }
+  }, [autoTheme, darkMode, systemDarkMode, toggleTheme]);
+
+  // react router 不再进行外部的 hash change, 例如, 手动更改 url
+  // 解决方法为手动去监听, 调用 react router 自己的 navigate 方法
+  // https://github.com/remix-run/react-router/issues/9940#issuecomment-1397534720
+  useEffect(() => {
+    const handleHashChange = () => {
+      const [, path] = window.location.hash.split('#/');
+      navigate(path, { replace: true });
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [navigate]);
 
   return (
     <div className={classes.app}>
-      {routes}
+      <Outlet />
 
       <Tabbar
         // placeholder 用于生成等高的占位符

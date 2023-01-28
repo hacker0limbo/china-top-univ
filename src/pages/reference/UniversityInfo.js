@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Cell, NavBar, Empty, Switch, DropdownMenu } from 'react-vant';
+import { Cell, NavBar, Empty, Switch, DropdownMenu, Icon, Flex } from 'react-vant';
 import { createUseStyles } from 'react-jss';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -33,6 +33,7 @@ export default function UniversityInfo() {
   const showDoubleTops2017Data = useSelector(
     (state) => state.table.tableData.showDoubleTops2017Data
   );
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div>
@@ -70,7 +71,38 @@ export default function UniversityInfo() {
         }
       />
       {uniInfo ? (
-        <Cell.Group inset className={classes.infoCard}>
+        <Cell.Group
+          title={
+            isEditing ? (
+              <Flex gutter={16}>
+                <Flex.Item style={{ borderRight: 'thin solid var(--rv-gray-6)' }}>
+                  重置
+                  <Icon name="revoke" />
+                </Flex.Item>
+                <Flex.Item
+                  onClick={() => {
+                    setIsEditing(false);
+                  }}
+                  style={{ color: 'var(--rv-green)' }}
+                >
+                  完成
+                  <Icon name="success" />
+                </Flex.Item>
+              </Flex>
+            ) : (
+              <div
+                onClick={() => {
+                  setIsEditing(true);
+                }}
+              >
+                编辑
+                <Icon name="edit" />
+              </div>
+            )
+          }
+          inset
+          className={classes.infoCard}
+        >
           {uniInfo.map((info, i) => {
             if (!showInvalidData && info === 'N/A') {
               return null;

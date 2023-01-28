@@ -39,7 +39,7 @@ const useStyles = createUseStyles({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--rv-white)',
   },
   settings: {
     display: 'inline-block',
@@ -52,7 +52,7 @@ const useStyles = createUseStyles({
     },
   },
   tags: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--rv-white)',
     padding: '0 16px 10px 16px',
   },
   tableBody: {
@@ -71,7 +71,7 @@ const useStyles = createUseStyles({
     padding: '10px',
   },
   advSearchListItemBody: {
-    border: '1px solid #f2f2f2',
+    border: '1px solid var(--rv-gray-3)',
     borderRadius: '6px',
   },
   advSearchListItemAdd: {
@@ -93,7 +93,7 @@ export default function UniversityTable() {
   const [advancedSearchForm] = Form.useForm();
   // 值是二元的搜索项
   const dualSearchOptionsNames = searchOptions.filter((o) => o.isDual).map((v) => v.text);
-  // 值是多元但可统计的搜索项, 目前只有
+  // 值是多元但可统计的搜索项, 目前只有 辦學模式
   const countedMultipleSearchOptions = searchOptions
     .filter((o) => o.isCountedMultiple)
     .map((option) => ({
@@ -547,7 +547,12 @@ export default function UniversityTable() {
                           // 默认为输入框
                           return (
                             <Form.Item
-                              rules={[{ required: true, message: '请输入搜索条件内容' }]}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: '请输入搜索条件内容',
+                                },
+                              ]}
                               label="搜索条件"
                               name={[field.name, 'advancedSearchContent']}
                               initialValue=""
