@@ -154,25 +154,7 @@ export default function Settings() {
         </Cell>
       </Cell.Group>
 
-      <Cell.Group title="通用">
-        <Cell
-          title="多语言"
-          isLink
-          value={currentLanguage}
-          onClick={() => {
-            navigate('languages');
-          }}
-        />
-        <Cell center title="黑暗模式" label="暗黑模式暂未全部完成">
-          <Switch
-            size={24}
-            checked={darkMode}
-            onChange={(changedValue) => {
-              dispatch.theme.setDarkMode(changedValue);
-            }}
-          />
-        </Cell>
-      </Cell.Group>
+      {sharedSettings}
 
       <Cell.Group title="表格">
         <Cell center title="显示无效数据">

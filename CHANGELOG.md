@@ -27,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 
 - 取消显示分割线
-- 数据更新: 2017 双一流数据删除
+- 数据更新: 2017 双一流数据及其相关显示均删除
 
 ## 2022
 

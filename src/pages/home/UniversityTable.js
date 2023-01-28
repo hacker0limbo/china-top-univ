@@ -29,7 +29,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import titleData from '../../data/titleData.json';
 import columnData from '../../data/columnData.json';
 import rowData from '../../data/rowData.json';
-import { searchOptions, tableSeparators, doubleTops2017Range } from '../../config/tableConfig';
+import { searchOptions } from '../../config/tableConfig';
 
 const useStyles = createUseStyles({
   header: {
@@ -107,9 +107,6 @@ export default function UniversityTable() {
   const [currentPage, setCurrentPage] = useState(1);
   // 表格数据展示
   const showInvalidData = useSelector((state) => state.table.tableData.showInvalidData);
-  const showDoubleTops2017Data = useSelector(
-    (state) => state.table.tableData.showDoubleTops2017Data
-  );
   const allowPagination = useSelector((state) => state.table.pagination.allowPagination);
   const rowsPerPage = useSelector((state) => state.table.pagination.rowsPerPage);
   // 每次操作完 pagination 后设置为 true
@@ -219,18 +216,9 @@ export default function UniversityTable() {
                     return null;
                   }
 
-                  if (!showDoubleTops2017Data && doubleTops2017Range.includes(i)) {
-                    return null;
-                  }
-
                   return (
                     <Cell
-                      border={
-                        tableSeparators.includes(i) ||
-                        (!showInvalidData && rs[i + 1] === 'N/A' && tableSeparators.includes(i + 1))
-                          ? true
-                          : false
-                      }
+                      border={false}
                       key={i}
                       title={columnData[i]}
                       titleClass={
@@ -277,15 +265,6 @@ export default function UniversityTable() {
                       size={24}
                       onChange={(checkedValue) => {
                         dispatch.table.toggleInvalidData(checkedValue);
-                      }}
-                    />
-                  </Cell>
-                  <Cell center title="显示2017双一流数据">
-                    <Switch
-                      size={24}
-                      checked={showDoubleTops2017Data}
-                      onChange={(checkedValue) => {
-                        dispatch.table.toggleDoubleTops2017Data(checkedValue);
                       }}
                     />
                   </Cell>

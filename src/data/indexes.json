@@ -133,25 +133,25 @@
       "Minzu University of China"
     ],
     "N": [
-      "NYU Shanghai",
       "NanJing XiaoZhuang University",
       "Nanchang University",
       "Nanjing Agricultural University",
       "Nanjing Forestry University",
       "Nanjing Medical University",
       "Nanjing Normal University",
+      "Nanjing Normal University of Special Education",
       "Nanjing University",
       "Nanjing University of Aeronautics and Astronautics",
       "Nanjing University of Chinese Medicine",
       "Nanjing University of Information Science and Technology",
       "Nanjing University of Posts and Telecommunications",
       "Nanjing University of Science and Technology",
-      "NanjingNormal University of Special Education",
       "Nankai University",
       "Nantong University",
       "National University of Defence Technology - China",
       "Naval Medical University",
       "Neusoft Institute Guangdong",
+      "New York University Shanghai",
       "Ningbo University",
       "Ningxia University",
       "North China Electric Power University",
@@ -216,8 +216,8 @@
       "The Education University of Hong Kong",
       "The Hong Kong University of Science and Technology",
       "The Hong Kong University of Science and Technology (Guangzhou)",
+      "Tiangong University",
       "Tianjin Medical University",
-      "Tianjin Polytechnic University",
       "Tianjin University",
       "Tianjin University of Traditional Chinese Medicine",
       "Tibet University",
@@ -270,13 +270,13 @@
   "zh": {
     "A": [
       "安徽大學",
-      "澳門大學",
-      "澳門科技大學",
       "澳門鏡湖護理學院",
+      "澳門大學",
       "澳門城市大學",
       "澳門理工大學",
+      "澳門管理學院",
       "澳門旅遊學院",
-      "澳門管理學院"
+      "澳門科技大學"
     ],
     "B": [
       "北京大學",
@@ -457,7 +457,6 @@
       "西交利物浦大學",
       "西湖大學",
       "湘潭大學",
-      "香港科技大學（廣州）",
       "香港中文大學（深圳）",
       "西南大學",
       "西南交通大學",
@@ -470,15 +469,16 @@
       "西安電子科技大學",
       "西北農林科技大學",
       "新疆大學",
+      "香港教育大學",
       "香港大學",
-      "香港中文大學",
-      "香港科技大學",
-      "香港城市大學",
       "香港理工大學",
       "香港浸會大學",
-      "香港教育大學",
+      "香港中文大學",
       "香港樹仁大學",
-      "香港都會大學"
+      "香港城市大學",
+      "香港都會大學",
+      "香港科技大學",
+      "香港科技大學（廣州）"
     ],
     "Y": [
       "延邊大學",
@@ -731,12 +731,12 @@
       "廣東理工學院",
       "南方科技大學",
       "北京師範大學-香港浸會大學聯合國際學院",
-      "香港科技大學（廣州）",
       "香港中文大學（深圳）",
       "深圳北理莫斯科大學",
       "廣東以色列理工學院",
+      "清華大學深圳國際研究生院",
       "哈爾濱工業大學（深圳）",
-      "清華大學深圳國際研究生院"
+      "香港科技大學（廣州）"
     ],
     "廣西": [
       "廣西大學"
@@ -781,26 +781,26 @@
       "石河子大學"
     ],
     "香港": [
-      "香港大學",
-      "香港中文大學",
-      "香港科技大學",
-      "香港城市大學",
-      "香港理工大學",
-      "香港浸會大學",
       "香港教育大學",
       "嶺南大學",
+      "香港大學",
+      "香港理工大學",
+      "香港浸會大學",
+      "香港中文大學",
       "香港樹仁大學",
-      "香港都會大學"
+      "香港城市大學",
+      "香港都會大學",
+      "香港科技大學"
     ],
     "澳門": [
-      "澳門大學",
-      "澳門科技大學",
       "澳門鏡湖護理學院",
-      "聖若瑟大學",
+      "澳門大學",
       "澳門城市大學",
       "澳門理工大學",
+      "澳門管理學院",
       "澳門旅遊學院",
-      "澳門管理學院"
+      "聖若瑟大學",
+      "澳門科技大學"
     ]
   }
 }

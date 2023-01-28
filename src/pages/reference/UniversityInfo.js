@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import rowData from '../../data/rowData.json';
 import columnData from '../../data/columnData.json';
-import { tableSeparators, doubleTops2017Range } from '../../config/tableConfig';
 
 const useStyles = createUseStyles({
   infoCard: {
@@ -108,21 +107,8 @@ export default function UniversityInfo() {
               return null;
             }
 
-            if (!showDoubleTops2017Data && doubleTops2017Range.includes(i)) {
-              return null;
-            }
-
             return (
-              <Cell
-                border={
-                  tableSeparators.includes(i) ||
-                  (!showInvalidData && uniInfo[i + 1] === 'N/A' && tableSeparators.includes(i + 1))
-                    ? true
-                    : false
-                }
-                key={i}
-                title={columnData[i]}
-              >
+              <Cell key={i} title={columnData[i]} border={false}>
                 <div>{info}</div>
               </Cell>
             );

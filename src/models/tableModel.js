@@ -10,7 +10,6 @@ export const tableModel = {
     },
     tableData: {
       showInvalidData: false,
-      showDoubleTops2017Data: false,
     },
   },
   reducers: {
@@ -38,15 +37,6 @@ export const tableModel = {
         tableData: {
           ...state.tableData,
           showInvalidData: payload,
-        },
-      };
-    },
-    toggleDoubleTops2017Data: (state, payload) => {
-      return {
-        ...state,
-        tableData: {
-          ...state.tableData,
-          showDoubleTops2017Data: payload,
         },
       };
     },
