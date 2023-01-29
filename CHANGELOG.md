@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - `index.css` 全局样式移入主题变量中
 - React Router 升级到最新
+- 数据转换有 [`xlsx`](https://github.com/SheetJS/sheetjs) 转为使用 [`csv-parse`](https://github.com/adaltas/node-csv/tree/master/packages/csv-parse/)
 
 ### Fixed
 

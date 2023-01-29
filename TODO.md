@@ -23,8 +23,9 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
     - [ ] Picker 组件重构
     - [ ] Pagination 存在状态变更后没有重新根据最新状态重新渲染, 升级后自动解决
     - [ ] 图表页等使用升级后的 Card 组件重构
-  - [ ] 增加选择组, 例如直接直接有为 985 的选项, 通过下拉框展示
-- [ ] 数据改为 csv 生成而非 xlsx
+  - [ ] 分类为排序和筛选
+    - [ ] 排序条件可以为: 建校时间, 校史, 排名等
+    - [ ] 筛选为已定的二维/多维/区间筛选: 是否为 985/211, 办学模式, 建校时间, UI 表现为选择组 + 滑块
 - [ ] 接入云后端, 实现登录注册验证等功能
   - [ ] 数据考虑存入后端, 实现可上传, 可编辑的功能
   - [ ] 角色权限
@@ -39,6 +40,7 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ## Done ✓
 
+- [x] 数据改为 csv 生成而非 xlsx
 - [x] 取消显示分割线
 - [x] React 升级为最新
 - [x] React Router 升级到最新
