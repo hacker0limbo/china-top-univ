@@ -1,0 +1,9 @@
+services:
+  app:
+    image: stephenyin/china-top-univ-prod
+    container_name: china-top-univ-prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '3001:80'

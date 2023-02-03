@@ -1,0 +1,12 @@
+services:
+  app:
+    image: stephenyin/china-top-univ-dev
+    container_name: china-top-univ-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000

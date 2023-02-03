@@ -35,7 +35,6 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 - [ ] 数据更新
   - [ ] 主页搜索条件对应字段的索引位置
-  - [ ] 主页表格展示的分割线对应其上字段的索引位置
   - [ ] 主页表格数据中的 column 名是否改变
 
 ## Done ✓
