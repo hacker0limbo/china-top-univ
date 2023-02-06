@@ -33,9 +33,12 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ## In Progress
 
+- [ ] React-vant 升级为 v3
 - [ ] 数据更新
   - [ ] 主页搜索条件对应字段的索引位置
   - [ ] 主页表格数据中的 column 名是否改变
+  - [ ] 索引页面 Tag 对应位置是否正确
+  - [ ] 分割线对应 column 位置是否正确
 
 ## Done ✓
 

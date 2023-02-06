@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - 增加 Dockerfile 和 docker-compose 文件
+- 索引增加 Tag
+- 分割线保留
+- 增加排序和筛选基本功能
+  - 建校时间升序降序
+  - 建校时间拖动选择筛选
 
 ## 2023.1
 

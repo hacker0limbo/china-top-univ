@@ -1,10 +1,12 @@
 import React from 'react';
-import { Tabs, IndexBar, Cell, NavBar } from 'react-vant';
+import { Tabs, IndexBar, Cell, NavBar, Tag, Flex } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
+import { referenceTagOptions, referenceInfoOptions } from '../../config/tableConfig';
 
 import indexes from '../../data/indexes.json';
 import rowData from '../../data/rowData.json';
+import columnData from '../../data/columnData.json';
 
 const useStyles = createUseStyles({
   indexBar: {
@@ -27,18 +29,39 @@ export default function Reference() {
             {Object.entries(locationIndexes).map(([indexCharacter, uniChineseNames]) => (
               <div key={indexCharacter}>
                 <IndexBar.Anchor index={indexCharacter} />
-                {uniChineseNames.map((uniChineseName) => (
-                  <Cell
-                    onClick={() => {
-                      // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
-                      const id = rowData.findIndex((row) => row[0] === uniChineseName).toString();
-                      navigate(id);
-                    }}
-                    key={uniChineseName}
-                    isLink
-                    title={uniChineseName}
-                  />
-                ))}
+                {uniChineseNames.map((uniChineseName) => {
+                  // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
+                  const id = rowData.findIndex((row) => row[0] === uniChineseName).toString();
+                  return (
+                    <Cell
+                      center
+                      onClick={() => {
+                        navigate(id);
+                      }}
+                      key={uniChineseName}
+                      isLink
+                      title={uniChineseName}
+                      label={
+                        <div>
+                          <div style={{ marginBottom: '4px' }}>
+                            {referenceInfoOptions
+                              .map(({ indexValue }) => rowData[id][indexValue])
+                              .join(' / ')}
+                          </div>
+                          <Flex justify="start" gutter={4}>
+                            {referenceTagOptions.map(({ type, indexValue }) => {
+                              return rowData[id][indexValue] === '是' ? (
+                                <Flex.Item key={indexValue}>
+                                  <Tag type={type}>{columnData[indexValue]}</Tag>
+                                </Flex.Item>
+                              ) : null;
+                            })}
+                          </Flex>
+                        </div>
+                      }
+                    />
+                  );
+                })}
               </div>
             ))}
           </IndexBar>
@@ -49,18 +72,40 @@ export default function Reference() {
             {Object.entries(chineseIndexes).map(([indexCharacter, uniChineseNames]) => (
               <div key={indexCharacter}>
                 <IndexBar.Anchor index={indexCharacter} />
-                {uniChineseNames.map((uniChineseName) => (
-                  <Cell
-                    onClick={() => {
-                      // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
-                      const id = rowData.findIndex((row) => row[0] === uniChineseName).toString();
-                      navigate(id);
-                    }}
-                    key={uniChineseName}
-                    isLink
-                    title={uniChineseName}
-                  />
-                ))}
+                {uniChineseNames.map((uniChineseName) => {
+                  const id = rowData.findIndex((row) => row[0] === uniChineseName).toString();
+
+                  return (
+                    <Cell
+                      center
+                      onClick={() => {
+                        // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
+                        navigate(id);
+                      }}
+                      key={uniChineseName}
+                      isLink
+                      title={uniChineseName}
+                      label={
+                        <div>
+                          <div style={{ marginBottom: '4px' }}>
+                            {referenceInfoOptions
+                              .map(({ indexValue }) => rowData[id][indexValue])
+                              .join(' / ')}
+                          </div>
+                          <Flex justify="start" gutter={4}>
+                            {referenceTagOptions.map(({ type, indexValue }) => {
+                              return rowData[id][indexValue] === '是' ? (
+                                <Flex.Item key={indexValue}>
+                                  <Tag type={type}>{columnData[indexValue]}</Tag>
+                                </Flex.Item>
+                              ) : null;
+                            })}
+                          </Flex>
+                        </div>
+                      }
+                    />
+                  );
+                })}
               </div>
             ))}
           </IndexBar>
@@ -71,18 +116,40 @@ export default function Reference() {
             {Object.entries(englishIndexes).map(([indexCharacter, uniEnglishNames]) => (
               <div key={indexCharacter}>
                 <IndexBar.Anchor index={indexCharacter} />
-                {uniEnglishNames.map((uniEnglishName) => (
-                  <Cell
-                    onClick={() => {
-                      // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
-                      const id = rowData.findIndex((row) => row[1] === uniEnglishName).toString();
-                      navigate(id);
-                    }}
-                    key={uniEnglishName}
-                    isLink
-                    title={uniEnglishName}
-                  />
-                ))}
+                {uniEnglishNames.map((uniEnglishName) => {
+                  // 这里 id 暂且使用每个大学在数据列表里的索引, 由于存在部分学校标识码没有的原因
+                  const id = rowData.findIndex((row) => row[1] === uniEnglishName).toString();
+
+                  return (
+                    <Cell
+                      center
+                      onClick={() => {
+                        navigate(id);
+                      }}
+                      key={uniEnglishName}
+                      isLink
+                      title={uniEnglishName}
+                      label={
+                        <div>
+                          <div style={{ marginBottom: '4px' }}>
+                            {referenceInfoOptions
+                              .map(({ indexValue }) => rowData[id][indexValue])
+                              .join(' / ')}
+                          </div>
+                          <Flex justify="start" gutter={4}>
+                            {referenceTagOptions.map(({ type, indexValue }) => {
+                              return rowData[id][indexValue] === '是' ? (
+                                <Flex.Item key={indexValue}>
+                                  <Tag type={type}>{columnData[indexValue]}</Tag>
+                                </Flex.Item>
+                              ) : null;
+                            })}
+                          </Flex>
+                        </div>
+                      }
+                    />
+                  );
+                })}
               </div>
             ))}
           </IndexBar>

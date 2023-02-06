@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect, useRef } from 'react';
+import React, { useState, useMemo, useLayoutEffect, useRef, useEffect } from 'react';
 import {
   Typography,
   Flex,
@@ -17,9 +17,9 @@ import {
   Lazyload,
   Sticky,
   Empty,
-  Tag,
   DropdownMenu,
   Switch,
+  Slider,
 } from 'react-vant';
 import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
 import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
@@ -29,7 +29,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import titleData from '../../data/titleData.json';
 import columnData from '../../data/columnData.json';
 import rowData from '../../data/rowData.json';
-import { searchOptions } from '../../config/tableConfig';
+import { searchOptions, tableSeparators, sortOptions } from '../../config/tableConfig';
 
 const useStyles = createUseStyles({
   header: {
@@ -54,6 +54,25 @@ const useStyles = createUseStyles({
   tags: {
     backgroundColor: 'var(--rv-white)',
     padding: '0 16px 10px 16px',
+  },
+  actions: {
+    '& .rv-dropdown-menu__bar': {
+      // backgroundColor: 'inherit',
+      boxShadow: 'none',
+    },
+  },
+  filterActionSliderButton: {
+    width: '30px',
+    color: 'var(--rv-white)',
+    fontSize: '10px',
+    lineHeight: '18px',
+    textAlign: 'center',
+    backgroundColor: 'var(--rv-red)',
+    borderRadius: '100px',
+    userSelect: 'none',
+  },
+  filterActionFooter: {
+    padding: '16px',
   },
   tableBody: {
     margin: '16px 0',
@@ -102,6 +121,19 @@ export default function UniversityTable() {
     }));
   // 用于保存当前(之前 Picker 选择的搜索项)
   const previousSearchItem = useRef(null);
+  // 排序搜索操作的 dropdown 引用
+  const actionDropdownRef = useRef(null);
+  // 表格是排序
+  const [tableSort, setTableSort] = useState({ sortUniv: null });
+  // 表格筛选
+  const [tableFilterForm] = Form.useForm();
+  // 建校时间两个极值, 分别为数据集最小值 -10 和 最大值 + 10
+  const minEstablishYear = useMemo(() => Math.min(...rowData.map((r) => r[4])) - 10, []);
+  const maxEstablishYear = useMemo(() => Math.max(...rowData.map((r) => r[4])) + 10, []);
+  const [establishYearRange, setEstablishYearRange] = useState([
+    minEstablishYear,
+    maxEstablishYear,
+  ]);
   // 表格分页和数据
   const [tableRows, setTableRows] = useState(rowData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -117,14 +149,28 @@ export default function UniversityTable() {
     searchOptions: 'N/A',
     result: `检索到 ${rowData.length} 条数据`,
   });
-
+  // 排序后的数据
+  const sortedTableRows = useMemo(() => {
+    if (tableSort.sortUniv) {
+      const indexValue = tableSort.sortUniv[0];
+      if (tableSort.sortUniv.includes('a')) {
+        // 升序
+        return [...tableRows].sort((a, b) => a[indexValue] - b[indexValue]);
+      } else {
+        // 降序
+        return [...tableRows].sort((a, b) => b[indexValue] - a[indexValue]);
+      }
+    } else {
+      return tableRows;
+    }
+  }, [tableRows, tableSort.sortUniv]);
   // pagination 下每一页展示的数据
   const tableRowsWithPagination = useMemo(
     () =>
       allowPagination
-        ? tableRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-        : tableRows,
-    [allowPagination, currentPage, rowsPerPage, tableRows]
+        ? sortedTableRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+        : sortedTableRows,
+    [allowPagination, currentPage, rowsPerPage, sortedTableRows]
   );
 
   const handleSearch = (value) => {
@@ -218,7 +264,14 @@ export default function UniversityTable() {
 
                   return (
                     <Cell
-                      border={false}
+                      border={
+                        // 当分割线这行的数据不存在值时会导致分割线不展示, 解决方法是让其上一行数据显示分割线
+                        // 即判断条件为下一条数据为分割线数据, 且下一条数据的值为空
+                        tableSeparators.includes(i) ||
+                        (!showInvalidData && rs[i + 1] === 'N/A' && tableSeparators.includes(i + 1))
+                          ? true
+                          : false
+                      }
                       key={i}
                       title={columnData[i]}
                       titleClass={
@@ -341,33 +394,79 @@ export default function UniversityTable() {
           onSearch={handleSearch}
         />
 
-        <Flex gutter={8} className={classes.tags} align="center">
-          <Flex.Item>
-            <Tag
-              onClick={() => {
-                setTableRows(rowData);
-                Toast.success({
-                  message: '重设表格成功',
-                });
-              }}
-              size="medium"
-              type="default"
-            >
-              重设表格
-            </Tag>
-          </Flex.Item>
-          <Flex.Item>
-            <Tag
-              onClick={() => {
-                window.scrollTo({ top: document.body.scrollHeight });
-              }}
-              size="medium"
-              type="default"
-            >
-              滑直底部
-            </Tag>
-          </Flex.Item>
-        </Flex>
+        <DropdownMenu
+          ref={actionDropdownRef}
+          className={classes.actions}
+          value={tableSort}
+          onChange={(value) => {
+            setTableSort(value);
+          }}
+        >
+          <DropdownMenu.Item name="sortUniv" options={sortOptions} />
+          <DropdownMenu.Item name="filterUniv" title="全部筛选">
+            <div className={classes.filterAction}>
+              <Form
+                initialValues={{
+                  4: [minEstablishYear, maxEstablishYear],
+                }}
+                border={false}
+                layout="vertical"
+                onFinish={(values) => {
+                  console.log('onFinish', values);
+                }}
+                form={tableFilterForm}
+              >
+                <Form.Item name="4" label="建校时间">
+                  <Slider
+                    style={{ margin: '0 16px' }}
+                    leftButton={
+                      <div className={classes.filterActionSliderButton}>
+                        {establishYearRange[0]}
+                      </div>
+                    }
+                    rightButton={
+                      <div className={classes.filterActionSliderButton}>
+                        {establishYearRange[1]}
+                      </div>
+                    }
+                    onChange={(value) => {
+                      setEstablishYearRange(value);
+                    }}
+                    range
+                    min={minEstablishYear}
+                    max={maxEstablishYear}
+                  />
+                </Form.Item>
+              </Form>
+
+              <Flex gutter={16} className={classes.filterActionFooter}>
+                <Flex.Item span={12}>
+                  <Button
+                    block
+                    type="default"
+                    onClick={() => {
+                      actionDropdownRef.current?.close();
+                    }}
+                  >
+                    重置
+                  </Button>
+                </Flex.Item>
+                <Flex.Item span={12}>
+                  <Button
+                    block
+                    type="primary"
+                    onClick={() => {
+                      tableFilterForm.submit();
+                      actionDropdownRef.current?.close();
+                    }}
+                  >
+                    完成
+                  </Button>
+                </Flex.Item>
+              </Flex>
+            </div>
+          </DropdownMenu.Item>
+        </DropdownMenu>
       </Sticky>
 
       <Popup

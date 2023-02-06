@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import rowData from '../../data/rowData.json';
 import columnData from '../../data/columnData.json';
+import { tableSeparators } from '../../config/tableConfig';
 
 const useStyles = createUseStyles({
   infoCard: {
@@ -108,7 +109,16 @@ export default function UniversityInfo() {
             }
 
             return (
-              <Cell key={i} title={columnData[i]} border={false}>
+              <Cell
+                border={
+                  tableSeparators.includes(i) ||
+                  (!showInvalidData && uniInfo[i + 1] === 'N/A' && tableSeparators.includes(i + 1))
+                    ? true
+                    : false
+                }
+                key={i}
+                title={columnData[i]}
+              >
                 <div>{info}</div>
               </Cell>
             );
