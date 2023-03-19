@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useLayoutEffect, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect, useRef } from 'react';
 import {
-  Typography,
   Flex,
   Search,
   Toast,
@@ -9,10 +8,8 @@ import {
   Picker,
   Dialog,
   Form,
-  Field,
   Icon,
   Button,
-  Radio,
   Cell,
   Lazyload,
   Sticky,
@@ -21,8 +18,6 @@ import {
   Switch,
   Slider,
 } from 'react-vant';
-import UniversityTableAdvSearchOptionPicker from './UniversityTableAdvSearchOptionPicker';
-import UniversityTableAdvSearchContentPicker from './UniversityTableAdvSearchContentPicker';
 import { createUseStyles } from 'react-jss';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -86,16 +81,6 @@ const useStyles = createUseStyles({
   highlightedSearchValue: {
     backgroundColor: '#ffff00',
   },
-  advSearchListItem: {
-    padding: '10px',
-  },
-  advSearchListItemBody: {
-    border: '1px solid var(--rv-gray-3)',
-    borderRadius: '6px',
-  },
-  advSearchListItemAdd: {
-    padding: '0 10px 10px 10px',
-  },
 });
 
 export default function UniversityTable() {
@@ -107,20 +92,6 @@ export default function UniversityTable() {
   const [searchUnivName, setSearchUnivName] = useState('');
   const [searchOption, setSearchOption] = useState({ value: 0 });
   const [showSearchOptionsPicker, setShowSearchOptionsPicker] = useState(false);
-  // 高级搜索
-  const [showAdvancedSearchDialog, setShowAdvancedSearchDialog] = useState(false);
-  const [advancedSearchForm] = Form.useForm();
-  // 值是二元的搜索项
-  const dualSearchOptionsNames = searchOptions.filter((o) => o.isDual).map((v) => v.text);
-  // 值是多元但可统计的搜索项, 目前只有 辦學模式
-  const countedMultipleSearchOptions = searchOptions
-    .filter((o) => o.isCountedMultiple)
-    .map((option) => ({
-      text: option.text,
-      countableValues: Array.from(new Set(rowData.map((r) => r[option.value]))),
-    }));
-  // 用于保存当前(之前 Picker 选择的搜索项)
-  const previousSearchItem = useRef(null);
   // 排序搜索操作的 dropdown 引用
   const actionDropdownRef = useRef(null);
   // 表格是排序
@@ -173,6 +144,8 @@ export default function UniversityTable() {
     [allowPagination, currentPage, rowsPerPage, sortedTableRows]
   );
 
+  console.log('values', tableFilterForm.getFieldsValue());
+
   const handleSearch = (value) => {
     if (!searchOption.hasOwnProperty('value')) {
       // 没选择搜索条件
@@ -197,43 +170,6 @@ export default function UniversityTable() {
         },
       });
     }
-  };
-
-  const handleAdvancedSearch = (values) => {
-    const results = values.advancedSearches;
-    let filteredRows = [...rowData];
-    results.forEach(({ advancedSearchOption, advancedSearchContent }) => {
-      const advancedSearchOptionIndex = searchOptions.find(
-        (o) => o.text === advancedSearchOption
-      ).value;
-
-      filteredRows = filteredRows.filter((row) =>
-        row[advancedSearchOptionIndex].includes(advancedSearchContent)
-      );
-    });
-    Toast.success({
-      message: `检索成功，共检索到 ${filteredRows.length} 条数据`,
-      onClose: () => {
-        setTableRows(filteredRows);
-        // 设置搜索历史, 这里注意不能使用 tableRows, 因为获取不到其最新值
-        setSearchHistory({
-          searchStyle: '高级搜索',
-          searchOptions: results.reduce(
-            (r, { advancedSearchOption, advancedSearchContent }, i, a) => {
-              r += dualSearchOptionsNames.includes(advancedSearchOption)
-                ? `("${advancedSearchOption}" = "${advancedSearchContent}")`
-                : `("${advancedSearchContent}" in "${advancedSearchOption}")`;
-              if (i !== a.length - 1) {
-                r += ' and ';
-              }
-              return r;
-            },
-            ''
-          ),
-          result: `检索到 ${filteredRows.length} 条数据`,
-        });
-      },
-    });
   };
 
   useLayoutEffect(() => {
@@ -364,15 +300,7 @@ export default function UniversityTable() {
             />
           }
           showAction
-          actionText={
-            <div
-              onClick={() => {
-                setShowAdvancedSearchDialog(true);
-              }}
-            >
-              高级搜索
-            </div>
-          }
+          actionText={null}
           label={
             <div
               onClick={() => {
@@ -394,6 +322,7 @@ export default function UniversityTable() {
           onSearch={handleSearch}
         />
 
+        {/* 排序和筛选 */}
         <DropdownMenu
           ref={actionDropdownRef}
           className={classes.actions}
@@ -407,7 +336,7 @@ export default function UniversityTable() {
             <div className={classes.filterAction}>
               <Form
                 initialValues={{
-                  4: [minEstablishYear, maxEstablishYear],
+                  establishTime: [minEstablishYear, maxEstablishYear],
                 }}
                 border={false}
                 layout="vertical"
@@ -416,7 +345,7 @@ export default function UniversityTable() {
                 }}
                 form={tableFilterForm}
               >
-                <Form.Item name="4" label="建校时间">
+                <Form.Item name="establishTime" label="建校时间">
                   <Slider
                     style={{ margin: '0 16px' }}
                     leftButton={
@@ -469,6 +398,7 @@ export default function UniversityTable() {
         </DropdownMenu>
       </Sticky>
 
+      {/* 底部搜索项 */}
       <Popup
         safeAreaInsetBottom
         round
@@ -492,180 +422,10 @@ export default function UniversityTable() {
         />
       </Popup>
 
-      <Dialog
-        visible={showAdvancedSearchDialog}
-        title="高级搜索"
-        showCancelButton
-        confirmButtonText="搜索"
-        onCancel={() => {
-          setShowAdvancedSearchDialog(false);
-        }}
-        onConfirm={() => {
-          // 确认按钮只做一件事: 提交表单
-          // 验证在 onFinish 和 onFinishFailed 回调里做
-          advancedSearchForm.submit();
-        }}
-      >
-        <Form
-          showValidateMessage={false}
-          form={advancedSearchForm}
-          onFinish={(values) => {
-            handleAdvancedSearch(values);
-            // 关闭 dialog
-            setShowAdvancedSearchDialog(false);
-          }}
-          onFinishFailed={({ values, errorFields }) => {
-            // 表单存在错误, 保留表单
-            setShowAdvancedSearchDialog(true);
-          }}
-        >
-          <Form.List
-            name="advancedSearches"
-            initialValue={[{ advancedSearchOption: '', advancedSearchContent: '' }]}
-          >
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map((field, index) => (
-                  <div className={classes.advSearchListItem} key={field.key}>
-                    <Flex justify="between" align="center">
-                      <Flex.Item>
-                        <Typography.Title level={5}>搜索项目 {index + 1}</Typography.Title>
-                      </Flex.Item>
-                      <Flex.Item>
-                        {fields.length > 1 ? (
-                          <Icon
-                            name="delete-o"
-                            onClick={() => {
-                              remove(index);
-                            }}
-                          />
-                        ) : null}
-                      </Flex.Item>
-                    </Flex>
-                    <div className={classes.advSearchListItemBody}>
-                      <Form.Item
-                        rules={[{ required: true, message: '请选择一个搜索项' }]}
-                        name={[field.name, 'advancedSearchOption']}
-                        label="搜索项"
-                        customField
-                      >
-                        <UniversityTableAdvSearchOptionPicker
-                          form={advancedSearchForm}
-                          searchItemIndex={index}
-                          resetSearchContentOnConfirm={(value) => {
-                            const advancedSearchesValues =
-                              advancedSearchForm.getFieldValue('advancedSearches');
-                            if (value !== previousSearchItem?.current) {
-                              // 选了一个新的 search item, 重设 advancedSearchContent
-                              // 否则还是保存之前的 content, 因为 search item 不变
-                              advancedSearchesValues[index].advancedSearchContent = '';
-                              advancedSearchForm.setFieldsValue({
-                                advancedSearches: advancedSearchesValues,
-                              });
-                              previousSearchItem.current = value;
-                            }
-                          }}
-                          placeholder="请选择搜索项"
-                        />
-                      </Form.Item>
-
-                      <Form.Item
-                        noStyle
-                        shouldUpdate={(p, n) =>
-                          p.advancedSearches?.[index]?.advancedSearchOption !==
-                          n.advancedSearches?.[index]?.advancedSearchOption
-                        }
-                      >
-                        {() => {
-                          const countedMultipleSearchOptionsNames =
-                            countedMultipleSearchOptions.map((o) => o.text);
-                          const currentAdvancedSearchOption =
-                            advancedSearchForm.getFieldValue('advancedSearches')?.[index]
-                              ?.advancedSearchOption;
-                          const countedMultipleSearchOption = countedMultipleSearchOptions.filter(
-                            (o) => o.text === currentAdvancedSearchOption
-                          )?.[0];
-
-                          // 如果是二元的, 展示为 radio
-                          if (dualSearchOptionsNames.includes(currentAdvancedSearchOption)) {
-                            return (
-                              <Form.Item
-                                label="搜索条件"
-                                name={[field.name, 'advancedSearchContent']}
-                                rules={[{ required: true, message: '请选择搜索条件' }]}
-                                showValidateMessage
-                              >
-                                <Radio.Group direction="horizontal">
-                                  <Radio name="是">是</Radio>
-                                  <Radio name="N/A">N/A</Radio>
-                                </Radio.Group>
-                              </Form.Item>
-                            );
-                          }
-
-                          // 如果是多元可计数的, 展示为 picker
-                          if (
-                            countedMultipleSearchOptionsNames.includes(currentAdvancedSearchOption)
-                          ) {
-                            return (
-                              <Form.Item
-                                label="搜索条件"
-                                name={[field.name, 'advancedSearchContent']}
-                                rules={[{ required: true, message: '请选择搜索条件' }]}
-                                customField
-                              >
-                                <UniversityTableAdvSearchContentPicker
-                                  placeholder="选择搜索条件"
-                                  countedMultipleSearchOption={countedMultipleSearchOption}
-                                />
-                              </Form.Item>
-                            );
-                          }
-
-                          // 默认为输入框
-                          return (
-                            <Form.Item
-                              rules={[
-                                {
-                                  required: true,
-                                  message: '请输入搜索条件内容',
-                                },
-                              ]}
-                              label="搜索条件"
-                              name={[field.name, 'advancedSearchContent']}
-                              initialValue=""
-                            >
-                              <Field placeholder="请输入搜索条件内容" />
-                            </Form.Item>
-                          );
-                        }}
-                      </Form.Item>
-                    </div>
-                  </div>
-                ))}
-                <div className={classes.advSearchListItemAdd}>
-                  <Button
-                    round
-                    block
-                    plain
-                    icon="add-o"
-                    size="small"
-                    onClick={() => {
-                      add();
-                    }}
-                  >
-                    新增搜索项目
-                  </Button>
-                </div>
-              </>
-            )}
-          </Form.List>
-        </Form>
-      </Dialog>
-
       {/* 渲染表格数据 */}
       {renderTableBody()}
 
+      {/* 分页 */}
       {allowPagination ? (
         <div className={classes.tablePagination}>
           <Pagination

@@ -3,6 +3,7 @@ export const themeModel = {
   state: {
     auto: false,
     darkMode: false,
+    systemDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
   },
   reducers: {
     setDarkMode: (state, payload) => {
@@ -15,6 +16,12 @@ export const themeModel = {
       return {
         ...state,
         auto: payload,
+      };
+    },
+    setSystemDarkMode: (state, payload) => {
+      return {
+        ...state,
+        systemDarkMode: payload,
       };
     },
   },

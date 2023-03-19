@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - 建校时间升序降序
   - 建校时间拖动选择筛选
 
+### Changed
+
+- `antv/f2` 替换为 `echarts` 作为可视化图表库
+
 ## 2023.1
 
 ### Added

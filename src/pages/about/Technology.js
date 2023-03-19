@@ -12,7 +12,7 @@ const useStyles = createUseStyles({
 });
 
 export default function Technology() {
-  const { dependencies } = packageInfo
+  const { dependencies } = packageInfo;
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -55,11 +55,11 @@ export default function Technology() {
             label="React 移动端组件库"
           />
           <Cell center title="React-JSS" value={dependencies['react-jss']} label="React 样式库" />
-          <Cell center title="AntV-F2" value={dependencies['@antv/f2']} label="移动端可视化库" />
+          <Cell center title="Echarts" value={dependencies['echarts']} label="图表可视化库" />
         </Cell.Group>
 
         <Cell.Group inset title="数据处理">
-          <Cell center title="SheetJS" value={dependencies.xlsx} label="读取和操作 Excel" />
+          <Cell center title="CSV-Parse" value={dependencies['csv-parse']} label="读取和操作 csv" />
           <Cell center title="pinyin" value={dependencies.pinyin} label="拼音库" />
         </Cell.Group>
 
