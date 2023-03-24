@@ -18,6 +18,7 @@ import UniversityInfo from '../pages/reference/UniversityInfo';
 import Error from '../pages/error';
 import GeoLocationChart from '../pages/charts/GeoLocationChart';
 import EstablishmentChart from '../pages/charts/EstablishmentChart';
+import Assistant from '../pages/about/Assistant';
 
 export const router = createHashRouter([
   {
@@ -57,6 +58,7 @@ export const router = createHashRouter([
       { path: '/about/disclaimer', element: <Disclaimer /> },
       { path: '/about/feedback', element: <Feedback /> },
       { path: '/about/technology', element: <Technology /> },
+      { path: '/about/assistant', element: <Assistant /> },
       {
         path: '/settings',
         element: <Settings />,

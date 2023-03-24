@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { NavBar, Cell, ShareSheet, ImagePreview, Toast } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import websiteQRCode from '../../img/website-qrcode.png';
 
 export default function About() {
   const navigate = useNavigate();
   const [shareSheetVisible, setShareSheetVisible] = useState(false);
+  const authed = useSelector((state) => state.auth.authed);
 
   return (
     <div>
@@ -35,7 +37,7 @@ export default function About() {
           title="技术框架"
           isLink
           onClick={() => {
-            navigate('technology')
+            navigate('technology');
           }}
         />
         <Cell
@@ -79,6 +81,15 @@ export default function About() {
             navigate('feedback');
           }}
         />
+        {authed ? (
+          <Cell
+            title="小助手"
+            isLink
+            onClick={() => {
+              navigate('assistant');
+            }}
+          />
+        ) : null}
 
         <ShareSheet
           visible={shareSheetVisible}

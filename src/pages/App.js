@@ -5,6 +5,7 @@ import { createUseStyles } from 'react-jss';
 import { themeVars } from '../theme';
 import { useIsDarkTheme } from '../hooks/useIsDarkTheme';
 import { useDispatch } from 'react-redux';
+import { LocalStorageService } from '../services';
 
 const useStyles = createUseStyles({
   app: {},
@@ -99,6 +100,13 @@ function App() {
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, [navigate]);
+
+  // 监听是否存在 auth token, 存在设置登录状态
+  useEffect(() => {
+    if (LocalStorageService.getPersistAuth()) {
+      dispatch.auth.login();
+    }
+  }, [dispatch.auth]);
 
   return (
     <div className={classes.app}>
