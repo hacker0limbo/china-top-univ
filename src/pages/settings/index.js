@@ -210,6 +210,17 @@ export default function Settings() {
         />
       </Cell.Group>
 
+      <Cell.Group title="小助手">
+        <Cell
+          isLink
+          title="配置"
+          value={LocalStorageService.getAPIKey() ? '已配置' : '未配置'}
+          onClick={() => {
+            navigate('assistant-key');
+          }}
+        />
+      </Cell.Group>
+
       <Cell.Group title="图表">
         <Cell
           center

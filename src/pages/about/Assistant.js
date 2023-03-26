@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { NavBar, Typography, Field, Button, Toast, Loading } from 'react-vant';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { NavBar, Field, Button, Toast, Loading } from 'react-vant';
 import { useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import { Configuration, OpenAIApi } from 'openai';
@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { MessageList, SystemMessage, MessageBox } from 'react-chat-elements';
 
 import 'react-chat-elements/dist/main.css';
+import { LocalStorageService } from '../../services';
 
 const useStyles = createUseStyles({
   assistantBody: {
@@ -24,13 +25,13 @@ const useStyles = createUseStyles({
   },
 });
 
-const configuration = new Configuration({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
 // 免责声明
 export default function Assistant() {
+  const apiKey = LocalStorageService.getAPIKey();
+  const configuration = new Configuration({
+    apiKey: apiKey || '',
+  });
+  const openai = new OpenAIApi(configuration);
   const navigate = useNavigate();
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
@@ -91,29 +92,33 @@ export default function Assistant() {
   }, [inputValue]);
 
   useEffect(() => {
-    // 初始请求一次 openai
-    setConnecting(true);
-    openai
-      .createChatCompletion(
-        {
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: '你好' }],
-        },
-        // 5 秒钟的连接时间
-        {
-          timeout: 5000,
-        }
-      )
-      .then((res) => {
-        setSystemMessage(res.data.choices[0].message.content);
-      })
-      .catch((err) => {
-        setSystemMessage('小助手连接失败, 请刷新页面重试');
-      })
-      .finally(() => {
-        setConnecting(false);
-      });
-  }, []);
+    if (apiKey) {
+      // 初始请求一次 openai
+      setConnecting(true);
+      openai
+        .createChatCompletion(
+          {
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: '你好' }],
+          },
+          // 5 秒钟的连接时间
+          {
+            timeout: 5000,
+          }
+        )
+        .then((res) => {
+          setSystemMessage(res.data.choices[0].message.content);
+        })
+        .catch((err) => {
+          setSystemMessage('小助手连接失败, 请检查配置的 Key 是否正确');
+        })
+        .finally(() => {
+          setConnecting(false);
+        });
+    } else {
+      setSystemMessage('暂未配置 API Key, 请前往设置页面配置');
+    }
+  }, [apiKey]);
 
   useLayoutEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
@@ -165,7 +170,7 @@ export default function Assistant() {
         </div>
         <div className={classes.inputBottom}>
           <Field
-            disabled={sending || connecting}
+            disabled={sending || connecting || !apiKey}
             type="textarea"
             style={{ position: 'fixed', bottom: 50 }}
             value={inputValue}
@@ -182,7 +187,7 @@ export default function Assistant() {
             }}
             button={
               <Button
-                disabled={sending || connecting}
+                disabled={sending || connecting || !apiKey}
                 size="small"
                 type="primary"
                 onClick={() => {

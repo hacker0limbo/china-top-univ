@@ -66,6 +66,7 @@ export default function LoginForm() {
         label="秘钥"
       >
         <Field
+          type="password"
           onKeypress={(e) => {
             // 由于表单只有一个 input, 直接监听 enter 键, enter 时也提交表单
             if (e.key === 'Enter') {

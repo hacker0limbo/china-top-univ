@@ -19,6 +19,7 @@ import Error from '../pages/error';
 import GeoLocationChart from '../pages/charts/GeoLocationChart';
 import EstablishmentChart from '../pages/charts/EstablishmentChart';
 import Assistant from '../pages/about/Assistant';
+import AssistantKey from '../pages/settings/AssistantKey';
 
 export const router = createHashRouter([
   {
@@ -72,6 +73,14 @@ export const router = createHashRouter([
         element: (
           <Auth>
             <Upload />
+          </Auth>
+        ),
+      },
+      {
+        path: '/settings/assistant-key',
+        element: (
+          <Auth>
+            <AssistantKey />
           </Auth>
         ),
       },

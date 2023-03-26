@@ -24,4 +24,20 @@ export const LocalStorageService = {
 
     localStorage.setItem('settings', JSON.stringify(otherConfigs));
   },
+
+  setAPIKey(key) {
+    const settings = localStorage.getItem('settings') || '{}';
+
+    localStorage.setItem(
+      'settings',
+      JSON.stringify({
+        ...JSON.parse(settings),
+        apiKey: key,
+      })
+    );
+  },
+
+  getAPIKey() {
+    return JSON.parse(localStorage.getItem('settings'))?.apiKey;
+  },
 };
