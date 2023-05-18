@@ -20,7 +20,7 @@ import {
 } from 'react-vant';
 import { createUseStyles } from 'react-jss';
 import { useSelector, useDispatch } from 'react-redux';
-
+//
 import titleData from '../../data/titleData.json';
 import columnData from '../../data/columnData.json';
 import rowData from '../../data/rowData.json';
