@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavBar } from 'react-vant';
 import { useIsDarkTheme } from '../../hooks/useIsDarkTheme';
